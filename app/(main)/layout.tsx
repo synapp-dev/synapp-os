@@ -1,0 +1,21 @@
+"use client";
+
+import { AppSidebar } from "@/components/app-sidebar";
+import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
+import { Header } from "@/components/molecules/header";
+
+export default function MainLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <SidebarProvider>
+      <AppSidebar />
+      <div className="flex flex-col flex-1">
+        <Header />
+        <SidebarInset>{children}</SidebarInset>
+      </div>
+    </SidebarProvider>
+  );
+}
