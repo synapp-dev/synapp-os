@@ -3,19 +3,42 @@
 import * as React from "react"
 import {
   AudioWaveform,
-  BookOpen,
-  Bot,
+  BanknoteArrowUp,
+  BarChart,
+  Bell,
+  CalendarRange,
+  ChartNoAxesCombined,
+  ChevronsRight,
+  CircleCheckBig,
+  CircleFadingArrowUp,
+  Codesandbox,
   Command,
-  Frame,
+  FilePenLine,
+  Files,
+  FolderGit2,
   GalleryVerticalEnd,
-  Map,
-  PieChart,
-  Settings2,
+  Info,
+  LifeBuoy,
+  ListChecks,
+  ListTodo,
+  Milestone,
+  Package,
+  PackageOpen,
+  Phone,
+  Presentation,
+  Quote,
+  Rss,
+  Settings,
+  ShieldCheck,
+  Signature,
   SquareTerminal,
+  Ticket,
+  TicketCheck,
+  Tickets,
+  Users,
 } from "lucide-react"
 
-import { NavMain } from "@/components/nav-main"
-import { NavProjects } from "@/components/nav-projects"
+import { NavSection } from "@/components/nav-section"
 import { NavUser } from "@/components/nav-user"
 import { TeamSwitcher } from "@/components/team-switcher"
 import {
@@ -25,12 +48,13 @@ import {
   SidebarHeader,
   SidebarRail,
 } from "@/components/ui/sidebar"
+import { ProjectSwitcher } from "./project-switcher"
 
 // This is sample data.
 const data = {
   user: {
-    name: "shadcn",
-    email: "m@example.com",
+    name: "Aaron Girton",
+    email: "aaron@synapp.com.au",
     avatar: "/avatars/shadcn.jpg",
   },
   teams: [
@@ -52,71 +76,172 @@ const data = {
   ],
   navMain: [
     {
-      title: "Playground",
-      url: "#",
+      title: "Dashboard",
+      url: "/dashboard",
       icon: SquareTerminal,
       isActive: true,
+    },
+    {
+      title: "Calendar",
+      url: "/calendar",
+      icon: CalendarRange,
       items: [
         {
-          title: "History",
-          url: "#",
+          title: "Milestones",
+          url: "/milestones",
+          icon: Milestone,
         },
         {
-          title: "Starred",
-          url: "#",
+          title: "Meetings",
+          url: "/meetings",
+          icon: Presentation,
         },
         {
-          title: "Settings",
-          url: "#",
+          title: "Sprints",
+          url: "/sprints",
+          icon: ChevronsRight,
         },
       ],
     },
     {
-      title: "Models",
-      url: "#",
-      icon: Bot,
+      title: "Timeline",
+      url: "/timeline",
+      icon: ChartNoAxesCombined,
       items: [
         {
-          title: "Genesis",
-          url: "#",
-        },
-        {
-          title: "Explorer",
-          url: "#",
-        },
-        {
-          title: "Quantum",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "Documentation",
-      url: "#",
-      icon: BookOpen,
-      items: [
-        {
-          title: "Introduction",
-          url: "#",
-        },
-        {
-          title: "Get Started",
-          url: "#",
-        },
-        {
-          title: "Tutorials",
-          url: "#",
+          title: "Progress",
+          url: "/progress",
+          icon: CircleFadingArrowUp,
         },
         {
           title: "Changelog",
-          url: "#",
+          url: "/changelog",
+          icon: FilePenLine,
         },
       ],
     },
     {
+      title: "Tasks",
+      url: "/tasks",
+      icon: CircleCheckBig,
+      items: [
+        {
+          title: "Current",
+          url: "/current",
+          icon: ListTodo,
+        },
+        {
+          title: "Completed",
+          url: "/completed",
+          icon: ListChecks,
+        },
+      ],
+    },
+    {
+      title: "Requests",
+      url: "/requests",
+      icon: Tickets,
+      items: [
+        
+        {
+          title: "Pending",
+          url: "/pending",
+          icon: Ticket,
+        },
+        {
+          title: "Completed",
+          url: "/completed",
+          icon: TicketCheck,
+        },
+  
+      ],
+    },
+    {
+      title: "Files",
+      url: "/files",
+      icon: Files,
+      items: [
+        {
+          title: "Contracts",
+          url: "/contracts",
+          icon: Signature,
+        },
+        {
+          title: "Quotes",
+          url: "/quotes",
+          icon: Quote,
+        },
+        {
+          title: "Assets",
+          url: "/assets",
+          icon: Package,
+        },
+        {
+          title: "Deliverables",
+          url: "/deliverables",
+          icon: PackageOpen,
+        },
+        {
+          title: "Invoices",
+          url: "/invoices",
+          icon: BanknoteArrowUp,
+        },
+      ],
+    },  {
       title: "Settings",
-      url: "#",
-      icon: Settings2,
+      url: "/settings",
+      icon: Settings,
+      items: [
+        {
+          title: "Team",
+          url: "/team",
+          icon: Users,
+        },
+        {
+          title: "Brand",
+          url: "/brand",
+          icon: Codesandbox,
+        },
+        {
+          title: "Notifications",
+          url: "/notifications",
+          icon: Bell,
+        },
+        {
+          title: "Permissions",
+          url: "/permissions",
+          icon: ShieldCheck,
+        },
+      ],
+    },
+  ],
+  navGeneral: [
+    {
+      title: "Support",
+      url: "/support",
+      icon: LifeBuoy,
+      items: [
+        {
+          title: "Contact",
+          url: "#",
+        },
+        {
+          title: "FAQ",
+          url: "#",
+        },
+        {
+          title: "Terms",
+          url: "#",
+        },
+        {
+          title: "Privacy",
+          url: "#",
+        },
+      ],
+    },{
+      title: "About",
+      url: "/about",
+      icon: Info,
       items: [
         {
           title: "General",
@@ -139,19 +264,14 @@ const data = {
   ],
   projects: [
     {
-      name: "Design Engineering",
-      url: "#",
-      icon: Frame,
+      name: "Instantemp",
+      url: "/instantemp",
+      icon: FolderGit2,
     },
     {
-      name: "Sales & Marketing",
-      url: "#",
-      icon: PieChart,
-    },
-    {
-      name: "Travel",
-      url: "#",
-      icon: Map,
+      name: "Bullyproof",
+      url: "/bullyproof",
+      icon: FolderGit2,
     },
   ],
 }
@@ -161,10 +281,14 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
         <TeamSwitcher teams={data.teams} />
+        
       </SidebarHeader>
       <SidebarContent>
-        <NavMain items={data.navMain} />
-        <NavProjects projects={data.projects} />
+        <div className="px-4">
+          <ProjectSwitcher projects={data.projects} />
+        </div>
+        <NavSection items={data.navMain} />
+        <NavSection items={data.navGeneral} />
       </SidebarContent>
       <SidebarFooter>
         <NavUser user={data.user} />
