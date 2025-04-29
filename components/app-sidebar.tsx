@@ -1,22 +1,20 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 import {
-  AudioWaveform,
   BanknoteArrowUp,
-  BarChart,
   Bell,
+  Bot,
   CalendarRange,
   ChartNoAxesCombined,
   ChevronsRight,
   CircleCheckBig,
   CircleFadingArrowUp,
   Codesandbox,
-  Command,
   FilePenLine,
   Files,
   FolderGit2,
-  GalleryVerticalEnd,
+  GraduationCap,
   Info,
   LifeBuoy,
   ListChecks,
@@ -24,10 +22,8 @@ import {
   Milestone,
   Package,
   PackageOpen,
-  Phone,
   Presentation,
   Quote,
-  Rss,
   Settings,
   ShieldCheck,
   Signature,
@@ -36,19 +32,21 @@ import {
   TicketCheck,
   Tickets,
   Users,
-} from "lucide-react"
+  UtensilsCrossed,
+} from "lucide-react";
 
-import { NavSection } from "@/components/nav-section"
-import { NavUser } from "@/components/nav-user"
-import { TeamSwitcher } from "@/components/team-switcher"
+import { NavSection } from "@/components/nav-section";
+import { NavUser } from "@/components/nav-user";
+import { TeamSwitcher } from "@/components/team-switcher";
 import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
   SidebarHeader,
   SidebarRail,
-} from "@/components/ui/sidebar"
-import { ProjectSwitcher } from "./project-switcher"
+} from "@/components/ui/sidebar";
+import { ProjectSwitcher } from "./project-switcher";
+import { Separator } from "./ui/separator";
 
 // This is sample data.
 const data = {
@@ -59,19 +57,19 @@ const data = {
   },
   teams: [
     {
-      name: "Acme Inc",
-      logo: GalleryVerticalEnd,
-      plan: "Enterprise",
+      name: "Bullyproof Australia",
+      logo: GraduationCap,
+      plan: "Education",
     },
     {
-      name: "Acme Corp.",
-      logo: AudioWaveform,
-      plan: "Startup",
+      name: "400 Gradi",
+      logo: UtensilsCrossed,
+      plan: "Restaurant",
     },
     {
       name: "Evil Corp.",
-      logo: Command,
-      plan: "Free",
+      logo: Bot,
+      plan: "Startup",
     },
   ],
   navMain: [
@@ -142,7 +140,6 @@ const data = {
       url: "/requests",
       icon: Tickets,
       items: [
-        
         {
           title: "Pending",
           url: "/pending",
@@ -153,7 +150,6 @@ const data = {
           url: "/completed",
           icon: TicketCheck,
         },
-  
       ],
     },
     {
@@ -187,7 +183,8 @@ const data = {
           icon: BanknoteArrowUp,
         },
       ],
-    },  {
+    },
+    {
       title: "Settings",
       url: "/settings",
       icon: Settings,
@@ -238,7 +235,8 @@ const data = {
           url: "#",
         },
       ],
-    },{
+    },
+    {
       title: "About",
       url: "/about",
       icon: Info,
@@ -274,26 +272,26 @@ const data = {
       icon: FolderGit2,
     },
   ],
-}
+};
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
         <TeamSwitcher teams={data.teams} />
-        
       </SidebarHeader>
+      <Separator />
       <SidebarContent>
-        <div className="px-4">
+        <div className="px-2 pt-4">
           <ProjectSwitcher projects={data.projects} />
         </div>
-        <NavSection items={data.navMain} />
-        <NavSection items={data.navGeneral} />
+        <NavSection title="Project" items={data.navMain} />
+        <NavSection title="General" items={data.navGeneral} />
       </SidebarContent>
       <SidebarFooter>
         <NavUser user={data.user} />
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>
-  )
+  );
 }

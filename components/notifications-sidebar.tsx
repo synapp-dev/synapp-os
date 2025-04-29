@@ -1,45 +1,36 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 import {
   AudioWaveform,
-  BookOpen,
-  Bot,
   Command,
   Frame,
   GalleryVerticalEnd,
   Map,
   PieChart,
   Settings2,
-  SquareTerminal,
   AlertCircle,
   Bell,
   CheckCircle2,
   Clock,
   MessageSquare,
   Search,
-} from "lucide-react"
-import { Label } from "@/components/ui/label"
-import { Switch } from "@/components/ui/switch"
-import { RightSidebar } from "@/components/ui/right-sidebar"
+} from "lucide-react";
+
+import { RightSidebar } from "@/components/ui/right-sidebar";
 import {
   SidebarContent,
   SidebarFooter,
-  SidebarGroup,
-  SidebarGroupContent,
   SidebarHeader,
   SidebarInput,
-  SidebarMenu,
-  SidebarMenuItem,
-  SidebarMenuButton,
-} from "@/components/ui/sidebar"
+} from "@/components/ui/sidebar";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
+} from "@/components/ui/select";
 
 // This is sample data.
 const data = {
@@ -124,7 +115,8 @@ const data = {
       id: 1,
       type: "comment",
       title: "John Doe commented on your post",
-      message: "This is really interesting! I've been working on something similar. Would love to hear more about your approach.",
+      message:
+        "This is really interesting! I've been working on something similar. Would love to hear more about your approach.",
       time: "2 minutes ago",
       read: false,
       avatar: "/avatars/01.png",
@@ -133,7 +125,8 @@ const data = {
       id: 2,
       type: "like",
       title: "Sarah Smith liked your photo",
-      message: "Your latest project update looks amazing! The new design is really coming together.",
+      message:
+        "Your latest project update looks amazing! The new design is really coming together.",
       time: "1 hour ago",
       read: false,
       avatar: "/avatars/02.png",
@@ -142,7 +135,8 @@ const data = {
       id: 3,
       type: "mention",
       title: "You were mentioned in a post",
-      message: "Check out this new feature @you implemented. It's exactly what we needed!",
+      message:
+        "Check out this new feature @you implemented. It's exactly what we needed!",
       time: "3 hours ago",
       read: true,
       avatar: "/avatars/03.png",
@@ -160,32 +154,34 @@ const data = {
       id: 5,
       type: "system",
       title: "System update completed",
-      message: "Your workspace has been updated to the latest version with new features and improvements.",
+      message:
+        "Your workspace has been updated to the latest version with new features and improvements.",
       time: "1 day ago",
       read: true,
       avatar: "/avatars/05.png",
     },
   ],
-}
+};
 
 export function NotificationsSidebar() {
-  const [filter, setFilter] = React.useState("all")
-  const [search, setSearch] = React.useState("")
+  const [filter, setFilter] = React.useState("all");
+  const [search, setSearch] = React.useState("");
 
   const filteredNotifications = React.useMemo(() => {
-    let filtered = data.notifications
+    let filtered = data.notifications;
     if (filter !== "all") {
-      filtered = filtered.filter(n => n.type === filter)
+      filtered = filtered.filter((n) => n.type === filter);
     }
     if (search) {
-      const searchLower = search.toLowerCase()
-      filtered = filtered.filter(n => 
-        n.title.toLowerCase().includes(searchLower) || 
-        n.message.toLowerCase().includes(searchLower)
-      )
+      const searchLower = search.toLowerCase();
+      filtered = filtered.filter(
+        (n) =>
+          n.title.toLowerCase().includes(searchLower) ||
+          n.message.toLowerCase().includes(searchLower)
+      );
     }
-    return filtered
-  }, [filter, search])
+    return filtered;
+  }, [filter, search]);
 
   return (
     <RightSidebar collapsible="icon">
@@ -196,7 +192,7 @@ export function NotificationsSidebar() {
             <span className="text-base font-medium">Notifications</span>
           </div>
           <Select value={filter} onValueChange={setFilter}>
-            <SelectTrigger className="w-[120px]">
+            <SelectTrigger className="w-[50px]">
               <SelectValue placeholder="Filter" />
             </SelectTrigger>
             <SelectContent>
@@ -211,8 +207,8 @@ export function NotificationsSidebar() {
         </div>
         <div className="relative">
           <Search className="absolute left-2 top-2.5 size-4 text-muted-foreground" />
-          <SidebarInput 
-            placeholder="Search notifications..." 
+          <SidebarInput
+            placeholder="Search notifications..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             className="pl-8"
@@ -257,5 +253,5 @@ export function NotificationsSidebar() {
         </div>
       </SidebarFooter>
     </RightSidebar>
-  )
+  );
 }

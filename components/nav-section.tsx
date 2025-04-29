@@ -1,15 +1,15 @@
-"use client"
+"use client";
 
-import { ChevronRight, type LucideIcon } from "lucide-react"
-import Link from "next/link"
-import { usePathname } from "next/navigation"
-import * as React from "react"
+import { ChevronRight, type LucideIcon } from "lucide-react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import * as React from "react";
 
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
-} from "@/components/ui/collapsible"
+} from "@/components/ui/collapsible";
 import {
   SidebarGroup,
   SidebarGroupLabel,
@@ -19,43 +19,53 @@ import {
   SidebarMenuSub,
   SidebarMenuSubButton,
   SidebarMenuSubItem,
-} from "@/components/ui/sidebar"
+} from "@/components/ui/sidebar";
 
 export function NavSection({
+  title,
   items,
 }: {
+  title: string;
   items: {
-    title: string
-    url: string
-    icon?: LucideIcon
+    title: string;
+    url: string;
+    icon?: LucideIcon;
     items?: {
-      title: string
-      url: string
-      icon?: LucideIcon
-    }[]
-  }[]
+      title: string;
+      url: string;
+      icon?: LucideIcon;
+    }[];
+  }[];
 }) {
-  const pathname = usePathname()
-  const [openItem, setOpenItem] = React.useState<string | null>(null)
+  const pathname = usePathname();
+  const [openItem, setOpenItem] = React.useState<string | null>(null);
 
   // Update the open item when pathname changes
   React.useEffect(() => {
-    const activeItem = items.find(item => 
-      pathname === item.url || 
-      (item.items?.some(subItem => pathname === `${item.url}${subItem.url}`) ?? false)
-    )
-    setOpenItem(activeItem?.title ?? null)
-  }, [pathname, items])
+    const activeItem = items.find(
+      (item) =>
+        pathname === item.url ||
+        (item.items?.some(
+          (subItem) => pathname === `${item.url}${subItem.url}`
+        ) ??
+          false)
+    );
+    setOpenItem(activeItem?.title ?? null);
+  }, [pathname, items]);
 
   return (
     <SidebarGroup>
-      <SidebarGroupLabel>Platform</SidebarGroupLabel>
+      <SidebarGroupLabel>{title}</SidebarGroupLabel>
       <SidebarMenu>
         {items.map((item) => {
-          const isActive = pathname === item.url || 
-            (item.items?.some(subItem => pathname === `${item.url}${subItem.url}`) ?? false)
-          const isOpen = openItem === item.title
-          
+          const isActive =
+            pathname === item.url ||
+            (item.items?.some(
+              (subItem) => pathname === `${item.url}${subItem.url}`
+            ) ??
+              false);
+          const isOpen = openItem === item.title;
+
           return (
             <Collapsible
               key={item.title}
@@ -63,16 +73,20 @@ export function NavSection({
               open={isOpen}
               onOpenChange={(open) => {
                 if (open) {
-                  setOpenItem(item.title)
+                  setOpenItem(item.title);
                 } else if (isOpen) {
-                  setOpenItem(null)
+                  setOpenItem(null);
                 }
               }}
               className="group/collapsible"
             >
               <SidebarMenuItem>
                 <CollapsibleTrigger asChild>
-                  <SidebarMenuButton asChild tooltip={item.title} isActive={isActive}>
+                  <SidebarMenuButton
+                    asChild
+                    tooltip={item.title}
+                    isActive={isActive}
+                  >
                     <Link href={item.url}>
                       {item.icon && <item.icon />}
                       <span>{item.title}</span>
@@ -87,7 +101,10 @@ export function NavSection({
                     <SidebarMenuSub>
                       {item.items.map((subItem) => (
                         <SidebarMenuSubItem key={subItem.title}>
-                          <SidebarMenuSubButton asChild isActive={pathname === `${item.url}${subItem.url}`}>
+                          <SidebarMenuSubButton
+                            asChild
+                            isActive={pathname === `${item.url}${subItem.url}`}
+                          >
                             <Link href={`${item.url}${subItem.url}`}>
                               {subItem.icon && <subItem.icon />}
                               <span>{subItem.title}</span>
@@ -100,9 +117,9 @@ export function NavSection({
                 )}
               </SidebarMenuItem>
             </Collapsible>
-          )
+          );
         })}
       </SidebarMenu>
     </SidebarGroup>
-  )
+  );
 }
