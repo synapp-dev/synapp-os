@@ -11,19 +11,25 @@ import {
   CircleCheckBig,
   CircleFadingArrowUp,
   Codesandbox,
+  CreditCard,
   FilePenLine,
   Files,
+  FileText,
   FolderGit2,
   GraduationCap,
+  HelpCircle,
+  Infinity,
   Info,
   LifeBuoy,
   ListChecks,
   ListTodo,
+  Mail,
   Milestone,
   Package,
   PackageOpen,
   Presentation,
   Quote,
+  ScanText,
   Settings,
   ShieldCheck,
   Signature,
@@ -220,19 +226,23 @@ const data = {
       items: [
         {
           title: "Contact",
-          url: "#",
+          url: "/contact",
+          icon: Mail,
         },
         {
           title: "FAQ",
-          url: "#",
+          url: "/faq",
+          icon: HelpCircle,
         },
         {
           title: "Terms",
-          url: "#",
+          url: "/terms",
+          icon: FileText,
         },
         {
           title: "Privacy",
-          url: "#",
+          url: "/privacy",
+          icon: ShieldCheck,
         },
       ],
     },
@@ -243,19 +253,18 @@ const data = {
       items: [
         {
           title: "General",
-          url: "#",
-        },
-        {
-          title: "Team",
-          url: "#",
+          url: "/general",
+          icon: ScanText, 
         },
         {
           title: "Billing",
-          url: "#",
+          url: "/billing",
+          icon: CreditCard,
         },
         {
           title: "Limits",
-          url: "#",
+          url: "/limits",
+          icon: Infinity,
         },
       ],
     },
@@ -265,11 +274,13 @@ const data = {
       name: "Instantemp",
       url: "/instantemp",
       icon: FolderGit2,
+      type: "Web Application",
     },
     {
       name: "Bullyproof",
       url: "/bullyproof",
       icon: FolderGit2,
+      type: "Web Application",
     },
   ],
 };
@@ -285,7 +296,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <div className="px-2 pt-4">
           <ProjectSwitcher projects={data.projects} />
         </div>
-        <NavSection title="Project" items={data.navMain} />
+        <NavSection title="Project Menu" items={data.navMain} />
         <NavSection title="General" items={data.navGeneral} />
       </SidebarContent>
       <SidebarFooter>

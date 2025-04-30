@@ -15,7 +15,13 @@ import {
   Clock,
   MessageSquare,
   Search,
+  Heart,
+  AtSign,
+  UserPlus,
+  AlertTriangle,
 } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 
 import { RightSidebar } from "@/components/ui/right-sidebar";
 import {
@@ -31,6 +37,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/card";
+import { Avatar, AvatarImage } from "./ui/avatar";
+import { useRightSidebar } from "./ui/right-sidebar-provider";
 
 // This is sample data.
 const data = {
@@ -166,6 +175,53 @@ const data = {
 export function NotificationsSidebar() {
   const [filter, setFilter] = React.useState("all");
   const [search, setSearch] = React.useState("");
+  const { open, setOpen } = useRightSidebar();
+
+  const getNotificationIcon = (type: string) => {
+    switch (type) {
+      case "comment":
+        return MessageSquare;
+      case "like":
+        return Heart;
+      case "mention":
+        return AtSign;
+      case "follow":
+        return UserPlus;
+      case "system":
+        return AlertTriangle;
+      default:
+        return Bell;
+    }
+  };
+
+  const getFilterLabel = (type: string) => {
+    switch (type) {
+      case "comment":
+        return "Comments";
+      case "like":
+        return "Likes";
+      case "mention":
+        return "Mentions";
+      case "follow":
+        return "Follows";
+      case "system":
+        return "System";
+      default:
+        return "Notifications";
+    }
+  };
+
+  const hasUnreadNotifications = (type: string) => {
+    return data.notifications.some(n => n.type === type && !n.read);
+  };
+
+  const notificationTypes = [
+    { type: "comment", label: "Comments" },
+    { type: "like", label: "Likes" },
+    { type: "mention", label: "Mentions" },
+    { type: "follow", label: "Follows" },
+    { type: "system", label: "System" },
+  ];
 
   const filteredNotifications = React.useMemo(() => {
     let filtered = data.notifications;
@@ -186,72 +242,146 @@ export function NotificationsSidebar() {
   return (
     <RightSidebar collapsible="icon">
       <SidebarHeader className="gap-3.5 border-b p-4">
-        <div className="flex w-full items-center justify-between">
-          <div className="flex items-center gap-2">
-            <Bell className="size-4" />
-            <span className="text-base font-medium">Notifications</span>
-          </div>
-          <Select value={filter} onValueChange={setFilter}>
-            <SelectTrigger className="w-[50px]">
-              <SelectValue placeholder="Filter" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All</SelectItem>
-              <SelectItem value="comment">Comments</SelectItem>
-              <SelectItem value="like">Likes</SelectItem>
-              <SelectItem value="mention">Mentions</SelectItem>
-              <SelectItem value="follow">Follows</SelectItem>
-              <SelectItem value="system">System</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-        <div className="relative">
-          <Search className="absolute left-2 top-2.5 size-4 text-muted-foreground" />
-          <SidebarInput
-            placeholder="Search notifications..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="pl-8"
-          />
+        <div className="flex w-full flex-col gap-2">
+          {open ? (
+            <Select value={filter} onValueChange={setFilter}>
+              <SelectTrigger className="w-full">
+                <SelectValue>
+                  <div className="flex items-center gap-2">
+                    {filter === "all" ? (
+                      <Bell className="size-4" />
+                    ) : (
+                      React.createElement(getNotificationIcon(filter), { className: "size-4" })
+                    )}
+                    <span className="text-base font-medium">
+                      {getFilterLabel(filter)}
+                    </span>
+                  </div>
+                </SelectValue>
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">
+                  <div className="flex items-center gap-2">
+                    <Bell className="size-4" />
+                    <span>All Notifications</span>
+                  </div>
+                </SelectItem>
+                <SelectItem value="comment">
+                  <div className="flex items-center gap-2">
+                    <MessageSquare className="size-4" />
+                    <span>Comments</span>
+                  </div>
+                </SelectItem>
+                <SelectItem value="like">
+                  <div className="flex items-center gap-2">
+                    <Heart className="size-4" />
+                    <span>Likes</span>
+                  </div>
+                </SelectItem>
+                <SelectItem value="mention">
+                  <div className="flex items-center gap-2">
+                    <AtSign className="size-4" />
+                    <span>Mentions</span>
+                  </div>
+                </SelectItem>
+                <SelectItem value="follow">
+                  <div className="flex items-center gap-2">
+                    <UserPlus className="size-4" />
+                    <span>Follows</span>
+                  </div>
+                </SelectItem>
+                <SelectItem value="system">
+                  <div className="flex items-center gap-2">
+                    <AlertTriangle className="size-4" />
+                    <span>System</span>
+                  </div>
+                </SelectItem>
+              </SelectContent>
+            </Select>
+          ) : (
+            <div className="flex items-center gap-2">
+              <Bell className="size-4" />
+            </div>
+          )}
+          {open && (
+            <div className="relative">
+              <Search className="absolute left-2 top-2 size-4 text-muted-foreground" />
+              <SidebarInput
+                placeholder="Search notifications..."
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                className="pl-8"
+              />
+            </div>
+          )}
         </div>
       </SidebarHeader>
       <SidebarContent className="p-2">
-        <div className="space-y-2">
-          {filteredNotifications.map((notification) => (
-            <div
-              key={notification.id}
-              className={`rounded-lg border p-3 transition-colors hover:bg-accent ${
-                !notification.read ? "bg-accent/50" : ""
-              }`}
-            >
-              <div className="flex items-start gap-3">
-                <div className="size-8 rounded-full bg-muted">
-                  {/* Avatar would go here */}
-                </div>
-                <div className="flex-1 space-y-1">
-                  <div className="flex items-center justify-between">
-                    <p className="line-clamp-1 text-sm font-medium">
+        {open ? (
+          <div className="space-y-2">
+            {filteredNotifications.map((notification) => (
+              <Card key={notification.id} className="group/notification-card">
+                <CardHeader>
+                  <CardTitle className="text-sm font-medium flex items-center gap-2">
+                    <Avatar className="size-4 bg-muted">
+                      <AvatarImage src={notification.avatar} />
+                    </Avatar>
+                    <h3 className="text-sm font-medium line-clamp-1">
                       {notification.title}
-                    </p>
-                    <span className="text-xs text-muted-foreground">
-                      {notification.time}
-                    </span>
-                  </div>
-                  <p className="line-clamp-2 text-sm text-muted-foreground">
+                    </h3>
+                  </CardTitle>
+                  <CardDescription className="text-xs text-muted-foreground line-clamp-2">
                     {notification.message}
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-xs text-muted group-hover/notification-card:text-foreground transition-colors">
+                    {notification.time}
                   </p>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        ) : (
+          <div className="flex flex-col gap-1">
+            {notificationTypes.map(({ type, label }) => {
+              const Icon = getNotificationIcon(type);
+              const hasUnread = hasUnreadNotifications(type);
+              
+              return (
+                <Tooltip key={type}>
+                  <TooltipTrigger asChild>
+                    <button
+                      className="relative flex items-center justify-center p-2 hover:bg-muted rounded-md transition-colors"
+                      onClick={() => {
+                        setFilter(type);
+                        setOpen(true);
+                      }}
+                    >
+                      <Icon className={cn(
+                        "size-4",
+                        !hasUnread && "text-muted-foreground"
+                      )} />
+                      {hasUnread && (
+                        <span className="absolute top-1 right-1 size-1.5 rounded-full bg-yellow-500" />
+                      )}
+                    </button>
+                  </TooltipTrigger>
+                  <TooltipContent side="left" align="center">
+                    {label}
+                  </TooltipContent>
+                </Tooltip>
+              );
+            })}
+          </div>
+        )}
       </SidebarContent>
-      <SidebarFooter>
+      {/* <SidebarFooter>
         <div className="flex items-center justify-between p-4 text-xs text-muted-foreground">
           <span>{filteredNotifications.length} notifications</span>
           <button className="hover:text-foreground">Mark all as read</button>
         </div>
-      </SidebarFooter>
+      </SidebarFooter> */}
     </RightSidebar>
   );
 }

@@ -26,6 +26,7 @@ export function ProjectSwitcher({
     name: string;
     icon: React.ElementType;
     url: string;
+    type?: string;
   }[];
 }) {
   const { isMobile } = useSidebar();
@@ -48,9 +49,14 @@ export function ProjectSwitcher({
                 <activeProject.icon className="size-3" />
               </div>
               <div className="grid flex-1 text-left text-sm leading-tight">
-                <span className="truncate font-medium">
+                <p className="truncate font-medium">
                   {activeProject.name}
-                </span>
+                </p>
+                {activeProject.type && (
+                  <p className="text-xs text-muted-foreground">
+                    {activeProject.type}
+                  </p>
+                )}
               </div>
               <ChevronsDown className="ml-auto" />
             </SidebarMenuButton>
