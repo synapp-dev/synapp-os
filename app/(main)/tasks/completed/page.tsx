@@ -1,3 +1,5 @@
+import { SettingsPageTemplate } from "@/components/templates/settings-page-template";
+
 export default function TasksCompletedPage() {
-  return <div>TasksCompletedPage</div>;
+  return <SettingsPageTemplate title="Completed" />;
 }

@@ -1,4 +1,5 @@
+import { SettingsPageTemplate } from "@/components/templates/settings-page-template";
+
 export default function SettingsPermissionsPage() {
-  return <div>SettingsPermissionsPage</div>;
+  return <SettingsPageTemplate title="Permissions" />;
 }
-    

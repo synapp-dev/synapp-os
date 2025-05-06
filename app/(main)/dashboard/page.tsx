@@ -1,18 +1,40 @@
-'use client'
+"use client";
 
-import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardFooter,
+} from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Calendar } from "@/components/ui/calendar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
-import { CheckCircle2, Circle, Clock, File, Folder, GitBranch, GitCommit, Upload, TrendingUp } from "lucide-react";
+import {
+  CheckCircle2,
+  Circle,
+  Clock,
+  File,
+  Folder,
+  GitBranch,
+  GitCommit,
+  Upload,
+  TrendingUp,
+} from "lucide-react";
 import { format } from "date-fns";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import Image from "next/image";
 import { Area, AreaChart, CartesianGrid, XAxis } from "recharts";
-import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
+import {
+  ChartConfig,
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+} from "@/components/ui/chart";
 
 export default function DashboardPage() {
   const [date, setDate] = useState<Date | undefined>(new Date());
@@ -40,9 +62,21 @@ export default function DashboardPage() {
   };
 
   const currentTasks = [
-    { title: "Implement user authentication", assignee: "John D.", status: "in-progress" },
-    { title: "Fix mobile responsiveness", assignee: "Sarah M.", status: "pending" },
-    { title: "Update documentation", assignee: "Mike R.", status: "in-progress" },
+    {
+      title: "Implement user authentication",
+      assignee: "John D.",
+      status: "in-progress",
+    },
+    {
+      title: "Fix mobile responsiveness",
+      assignee: "Sarah M.",
+      status: "pending",
+    },
+    {
+      title: "Update documentation",
+      assignee: "Mike R.",
+      status: "in-progress",
+    },
   ];
 
   const requests = [
@@ -64,7 +98,7 @@ export default function DashboardPage() {
     { month: "April", desktop: 73, mobile: 190 },
     { month: "May", desktop: 209, mobile: 130 },
     { month: "June", desktop: 214, mobile: 140 },
-  ]
+  ];
 
   const chartConfig = {
     desktop: {
@@ -75,12 +109,12 @@ export default function DashboardPage() {
       label: "Mobile",
       color: "hsl(var(--chart-2))",
     },
-  } satisfies ChartConfig
+  } satisfies ChartConfig;
 
   return (
-    <div className="space-y-6 px-6">
+    <div className="space-y-6">
       <div className="grid gap-4 grid-cols-3">
-      <Card className="col-span-1">
+        <Card className="col-span-1">
           <CardHeader>
             <CardTitle>Welcome back, Aaron!</CardTitle>
           </CardHeader>
@@ -88,7 +122,9 @@ export default function DashboardPage() {
             <div className="flex flex-col space-y-4">
               <div className="flex items-center gap-2">
                 <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-                <span className="text-sm text-muted-foreground">Last active: 2 hours ago</span>
+                <span className="text-sm text-muted-foreground">
+                  Last active: 2 hours ago
+                </span>
               </div>
               <div className="flex items-center gap-2">
                 <Badge variant="secondary">Admin</Badge>
@@ -110,7 +146,13 @@ export default function DashboardPage() {
         <Card className="col-span-2">
           <div className=" px-6 grid grid-cols-5">
             <div className="bg-muted col-span-2">
-              <Image src="https://qcpaanr39l6dixw3.public.blob.vercel-storage.com/instantemp-login-RnBZeENGaVe6FxqD2IukX2oA2fB0DG" alt="Instantemp" width={1920} height={1080} className="w-full h-full object-cover rounded-lg opacity-75 hover:opacity-100 transition-opacity duration-300" />
+              <Image
+                src="https://qcpaanr39l6dixw3.public.blob.vercel-storage.com/instantemp-login-RnBZeENGaVe6FxqD2IukX2oA2fB0DG"
+                alt="Instantemp"
+                width={1920}
+                height={1080}
+                className="w-full h-full object-cover rounded-lg opacity-75 hover:opacity-100 transition-opacity duration-300"
+              />
             </div>
             <div className="col-span-3">
               <CardHeader>
@@ -118,13 +160,20 @@ export default function DashboardPage() {
               </CardHeader>
               <CardContent className="space-y-4">
                 <div>
-                  <p className="text-sm text-muted-foreground">www.instantemp.com</p>
+                  <p className="text-sm text-muted-foreground">
+                    www.instantemp.com
+                  </p>
                 </div>
-                
+
                 <div>
-                  <p className="text-xs font-medium mb-1 text-muted-foreground">Domains</p>
+                  <p className="text-xs font-medium mb-1 text-muted-foreground">
+                    Domains
+                  </p>
                   <div className="flex items-center gap-2">
-                    <a href="https://instantemp.com" className="text-sm text-blue-500 hover:underline">
+                    <a
+                      href="https://instantemp.com"
+                      className="text-sm text-blue-500 hover:underline"
+                    >
                       instantemp.com
                     </a>
                     <Badge variant="secondary">+2</Badge>
@@ -133,22 +182,32 @@ export default function DashboardPage() {
 
                 <div className="flex gap-8">
                   <div>
-                    <p className="text-xs font-medium mb-1 text-muted-foreground">Status</p>
+                    <p className="text-xs font-medium mb-1 text-muted-foreground">
+                      Status
+                    </p>
                     <div className="flex items-center gap-2">
                       <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
                       <span className="text-sm">Ready</span>
                     </div>
                   </div>
                   <div>
-                    <p className="text-xs font-medium mb-1 text-muted-foreground">Created</p>
+                    <p className="text-xs font-medium mb-1 text-muted-foreground">
+                      Created
+                    </p>
                     <div className="flex items-center gap-2">
-                      <p className="text-sm">April 29, 2025 <span className="text-muted-foreground">by</span> aj0urdain</p>
+                      <p className="text-sm">
+                        April 29, 2025{" "}
+                        <span className="text-muted-foreground">by</span>{" "}
+                        aj0urdain
+                      </p>
                     </div>
                   </div>
                 </div>
 
                 <div>
-                  <p className="text-xs font-medium mb-1 text-muted-foreground">Source</p>
+                  <p className="text-xs font-medium mb-1 text-muted-foreground">
+                    Source
+                  </p>
                   <div className="space-y-2">
                     <div className="flex items-center gap-2">
                       <GitBranch className="w-4 h-4" />
@@ -156,9 +215,11 @@ export default function DashboardPage() {
                     </div>
                     <div className="flex items-center gap-2">
                       <GitCommit className="w-4 h-4" />
-                      
+
                       <span className="text-sm">b6c0a88</span>
-                      <span className="text-sm text-muted-foreground">fix: incorrect role display</span>
+                      <span className="text-sm text-muted-foreground">
+                        fix: incorrect role display
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -166,101 +227,106 @@ export default function DashboardPage() {
             </div>
           </div>
         </Card>
-        
       </div>
 
-    <Separator className="my-8" />
+      <Separator className="my-8" />
 
-    <Card className="w-full h-full max-h-[450px]">
-      <CardHeader>
-        <CardTitle>Website Traffic</CardTitle>
-        <CardDescription>
-          Showing total visitors for the last 6 months
-        </CardDescription>
-      </CardHeader>
-      <CardContent className="h-full max-h-[300px] w-full px-0">
-        <ChartContainer config={chartConfig} className="h-full max-h-[250px] w-full">
-          <AreaChart
-            accessibilityLayer
-            data={chartData}
-            margin={{
-              left: 12,
-              right: 12,
-            }}
-            height={25}
+      <Card className="w-full h-full max-h-[450px]">
+        <CardHeader>
+          <CardTitle>Website Traffic</CardTitle>
+          <CardDescription>
+            Showing total visitors for the last 6 months
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="h-full max-h-[300px] w-full px-0">
+          <ChartContainer
+            config={chartConfig}
+            className="h-full max-h-[250px] w-full"
           >
-            <CartesianGrid vertical={false} />
-            <XAxis
-              dataKey="month"
-              tickLine={false}
-              axisLine={false}
-              tickMargin={8}
-              tickFormatter={(value) => value.slice(0, 3)}
-            />
-            <ChartTooltip cursor={false} content={<ChartTooltipContent />} />
-            <defs>
-              <linearGradient id="fillDesktop" x1="0" y1="0" x2="0" y2="1">
-                <stop
-                  offset="5%"
-                  stopColor="hsl(221.2 83.2% 53.3%)"
-                  stopOpacity={0.8}
-                />
-                <stop
-                  offset="95%"
-                  stopColor="hsl(221.2 83.2% 53.3%)"
-                  stopOpacity={0.1}
-                />
-              </linearGradient>
-              <linearGradient id="fillMobile" x1="0" y1="0" x2="0" y2="1">
-                <stop
-                  offset="5%"
-                  stopColor="hsl(142.1 76.2% 36.3%)"
-                  stopOpacity={0.8}
-                />
-                <stop
-                  offset="95%"
-                  stopColor="hsl(142.1 76.2% 36.3%)"
-                  stopOpacity={0.1}
-                />
-              </linearGradient>
-            </defs>
-            <Area
-              dataKey="mobile"
-              type="natural"
-              fill="url(#fillMobile)"
-              fillOpacity={0.4}
-              stroke="hsl(142.1 76.2% 36.3%)"
-              stackId="a"
-            />
-            <Area
-              dataKey="desktop"
-              type="natural"
-              fill="url(#fillDesktop)"
-              fillOpacity={0.4}
-              stroke="hsl(221.2 83.2% 53.3%)"
-              stackId="a"
-            />
-          </AreaChart>
-        </ChartContainer>
-      </CardContent>
-      <CardFooter>
-        <div className="flex w-full items-start gap-2 text-sm">
-          <div className="grid gap-2">
-            <div className="flex items-center gap-2 font-medium leading-none">
-              Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
-            </div>
-            <div className="flex items-center gap-2 leading-none text-muted-foreground">
-              January - June 2025
+            <AreaChart
+              accessibilityLayer
+              data={chartData}
+              margin={{
+                left: 12,
+                right: 12,
+              }}
+              height={25}
+            >
+              <CartesianGrid vertical={false} />
+              <XAxis
+                dataKey="month"
+                tickLine={false}
+                axisLine={false}
+                tickMargin={8}
+                tickFormatter={(value) => value.slice(0, 3)}
+              />
+              <ChartTooltip cursor={false} content={<ChartTooltipContent />} />
+              <defs>
+                <linearGradient id="fillDesktop" x1="0" y1="0" x2="0" y2="1">
+                  <stop
+                    offset="5%"
+                    stopColor="hsl(221.2 83.2% 53.3%)"
+                    stopOpacity={0.8}
+                  />
+                  <stop
+                    offset="95%"
+                    stopColor="hsl(221.2 83.2% 53.3%)"
+                    stopOpacity={0.1}
+                  />
+                </linearGradient>
+                <linearGradient id="fillMobile" x1="0" y1="0" x2="0" y2="1">
+                  <stop
+                    offset="5%"
+                    stopColor="hsl(142.1 76.2% 36.3%)"
+                    stopOpacity={0.8}
+                  />
+                  <stop
+                    offset="95%"
+                    stopColor="hsl(142.1 76.2% 36.3%)"
+                    stopOpacity={0.1}
+                  />
+                </linearGradient>
+              </defs>
+              <Area
+                dataKey="mobile"
+                type="natural"
+                fill="url(#fillMobile)"
+                fillOpacity={0.4}
+                stroke="hsl(142.1 76.2% 36.3%)"
+                stackId="a"
+              />
+              <Area
+                dataKey="desktop"
+                type="natural"
+                fill="url(#fillDesktop)"
+                fillOpacity={0.4}
+                stroke="hsl(221.2 83.2% 53.3%)"
+                stackId="a"
+              />
+            </AreaChart>
+          </ChartContainer>
+        </CardContent>
+        <CardFooter>
+          <div className="flex w-full items-start gap-2 text-sm">
+            <div className="grid gap-2">
+              <div className="flex items-center gap-2 font-medium leading-none">
+                Trending up by 5.2% this month{" "}
+                <TrendingUp className="h-4 w-4" />
+              </div>
+              <div className="flex items-center gap-2 leading-none text-muted-foreground">
+                January - June 2025
+              </div>
             </div>
           </div>
-        </div>
-      </CardFooter>
-    </Card>
+        </CardFooter>
+      </Card>
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Project Progress</CardTitle>
+            <CardTitle className="text-sm font-medium">
+              Project Progress
+            </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">75%</div>
@@ -278,7 +344,9 @@ export default function DashboardPage() {
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Pending Requests</CardTitle>
+            <CardTitle className="text-sm font-medium">
+              Pending Requests
+            </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">3</div>
@@ -295,7 +363,7 @@ export default function DashboardPage() {
           </CardContent>
         </Card>
       </div>
-      
+
       <div className="grid gap-4 md:grid-cols-2">
         <Card>
           <CardHeader>
@@ -317,7 +385,9 @@ export default function DashboardPage() {
                     <div className="w-2 h-2 rounded-full bg-primary" />
                     <div>
                       <p className="font-medium">{event.title}</p>
-                      <p className="text-sm text-muted-foreground">{format(new Date(event.date), "MMM d, yyyy")}</p>
+                      <p className="text-sm text-muted-foreground">
+                        {format(new Date(event.date), "MMM d, yyyy")}
+                      </p>
                     </div>
                   </div>
                 ))}
@@ -341,7 +411,9 @@ export default function DashboardPage() {
                   <div key={stage.title}>
                     <div className="flex justify-between mb-1">
                       <span className="text-sm font-medium">{stage.title}</span>
-                      <span className="text-sm text-muted-foreground">{stage.progress}%</span>
+                      <span className="text-sm text-muted-foreground">
+                        {stage.progress}%
+                      </span>
                     </div>
                     <Progress value={stage.progress} />
                   </div>
@@ -352,7 +424,9 @@ export default function DashboardPage() {
                   <div key={stage.title}>
                     <div className="flex justify-between mb-1">
                       <span className="text-sm font-medium">{stage.title}</span>
-                      <span className="text-sm text-muted-foreground">{stage.progress}%</span>
+                      <span className="text-sm text-muted-foreground">
+                        {stage.progress}%
+                      </span>
                     </div>
                     <Progress value={stage.progress} />
                   </div>
@@ -371,12 +445,21 @@ export default function DashboardPage() {
           <CardContent>
             <div className="space-y-4">
               {currentTasks.map((task) => (
-                <div key={task.title} className="flex items-center justify-between">
+                <div
+                  key={task.title}
+                  className="flex items-center justify-between"
+                >
                   <div>
                     <p className="font-medium">{task.title}</p>
-                    <p className="text-sm text-muted-foreground">{task.assignee}</p>
+                    <p className="text-sm text-muted-foreground">
+                      {task.assignee}
+                    </p>
                   </div>
-                  <Badge variant={task.status === "in-progress" ? "default" : "outline"}>
+                  <Badge
+                    variant={
+                      task.status === "in-progress" ? "default" : "outline"
+                    }
+                  >
                     {task.status}
                   </Badge>
                 </div>
@@ -399,9 +482,16 @@ export default function DashboardPage() {
                 {requests
                   .filter((req) => req.status === "pending")
                   .map((req) => (
-                    <div key={req.title} className="flex items-center justify-between">
+                    <div
+                      key={req.title}
+                      className="flex items-center justify-between"
+                    >
                       <p className="font-medium">{req.title}</p>
-                      <Badge variant={req.priority === "high" ? "destructive" : "secondary"}>
+                      <Badge
+                        variant={
+                          req.priority === "high" ? "destructive" : "secondary"
+                        }
+                      >
                         {req.priority}
                       </Badge>
                     </div>
@@ -411,7 +501,10 @@ export default function DashboardPage() {
                 {requests
                   .filter((req) => req.status === "completed")
                   .map((req) => (
-                    <div key={req.title} className="flex items-center justify-between">
+                    <div
+                      key={req.title}
+                      className="flex items-center justify-between"
+                    >
                       <p className="font-medium">{req.title}</p>
                       <Badge variant="outline">completed</Badge>
                     </div>

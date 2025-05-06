@@ -1,3 +1,5 @@
+import { SettingsPageTemplate } from "@/components/templates/settings-page-template";
+
 export default function AboutGeneralPage() {
-  return <div>AboutGeneralPage</div>;
+  return <SettingsPageTemplate title="General" />;
 }

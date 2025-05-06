@@ -1,3 +1,5 @@
+import { SettingsPageTemplate } from "@/components/templates/settings-page-template";
+
 export default function SupportPage() {
-  return <div>Support</div>
+  return <SettingsPageTemplate title="Support" />;
 }

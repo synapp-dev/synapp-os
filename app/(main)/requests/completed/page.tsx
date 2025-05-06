@@ -1,3 +1,5 @@
+import { SettingsPageTemplate } from "@/components/templates/settings-page-template";
+
 export default function RequestsCompletedPage() {
-  return <div>RequestsCompletedPage</div>;
+  return <SettingsPageTemplate title="Completed" />;
 }

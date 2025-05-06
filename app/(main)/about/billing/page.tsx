@@ -1,3 +1,5 @@
+import { SettingsPageTemplate } from "@/components/templates/settings-page-template";
+
 export default function AboutBillingPage() {
-  return <div>AboutBillingPage</div>;
+  return <SettingsPageTemplate title="Billing" />;
 }

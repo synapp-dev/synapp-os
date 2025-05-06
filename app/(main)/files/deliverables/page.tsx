@@ -1,3 +1,5 @@
+import { SettingsPageTemplate } from "@/components/templates/settings-page-template";
+
 export default function FilesDeliverablesPage() {
-  return <div>FilesDeliverablesPage</div>;
+  return <SettingsPageTemplate title="Deliverables" />;
 }

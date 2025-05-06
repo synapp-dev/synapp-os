@@ -1,3 +1,5 @@
+import { SettingsPageTemplate } from "@/components/templates/settings-page-template";
+
 export default function FilesAssetsPage() {
-  return <div>FilesAssetsPage</div>;
+  return <SettingsPageTemplate title="Assets" />;
 }

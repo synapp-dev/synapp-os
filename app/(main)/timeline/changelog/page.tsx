@@ -1,3 +1,5 @@
+import { SettingsPageTemplate } from "@/components/templates/settings-page-template";
+
 export default function TimelineChangelogPage() {
-  return <div>TimelineChangelogPage</div>;
+  return <SettingsPageTemplate title="Changelog" />;
 }

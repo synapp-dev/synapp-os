@@ -1,3 +1,5 @@
+import { SettingsPageTemplate } from "@/components/templates/settings-page-template";
+
 export default function RequestsPendingPage() {
-  return <div>RequestsPendingPage</div>;
+  return <SettingsPageTemplate title="Pending" />;
 }

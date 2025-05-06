@@ -1,4 +1,5 @@
+import { SettingsPageTemplate } from "@/components/templates/settings-page-template";
+
 export default function SettingsBrandPage() {
-  return <div>SettingsBrandPage</div>;
+  return <SettingsPageTemplate title="Brand Settings" />;
 }
-    

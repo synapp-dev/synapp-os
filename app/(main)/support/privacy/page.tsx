@@ -1,3 +1,5 @@
+import { SettingsPageTemplate } from "@/components/templates/settings-page-template";
+
 export default function SupportPrivacyPage() {
-  return <div>SupportPrivacyPage</div>;
+  return <SettingsPageTemplate title="Privacy" />;
 }

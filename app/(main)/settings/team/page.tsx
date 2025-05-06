@@ -1,3 +1,5 @@
+import { SettingsPageTemplate } from "@/components/templates/settings-page-template";
+
 export default function SettingsTeamPage() {
-  return <div>SettingsTeamPage</div>;
+  return <SettingsPageTemplate title="Team" />;
 }

@@ -1,3 +1,5 @@
+import { SettingsPageTemplate } from "@/components/templates/settings-page-template";
+
 export default function SprintsPage() {
-  return <div>Sprints</div>
+  return <SettingsPageTemplate title="Sprints" />;
 }

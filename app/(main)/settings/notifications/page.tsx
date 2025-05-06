@@ -1,3 +1,5 @@
+import { SettingsPageTemplate } from "@/components/templates/settings-page-template";
+
 export default function SettingsNotificationsPage() {
-  return <div>SettingsNotificationsPage</div>;
+  return <SettingsPageTemplate title="Notifications" />;
 }

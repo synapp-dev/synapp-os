@@ -1,3 +1,5 @@
+import { SettingsPageTemplate } from "@/components/templates/settings-page-template";
+
 export default function AboutLimitsPage() {
-  return <div>AboutLimitsPage</div>;
+  return <SettingsPageTemplate title="Limits" />;
 }
