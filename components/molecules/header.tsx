@@ -11,21 +11,22 @@ import { SidebarTrigger } from "@/components/ui/sidebar";
 import { ThemeToggle } from "@/components/atoms/theme-toggle";
 import { RightSidebarTrigger } from "@/components/ui/right-sidebar-trigger";
 import { usePathname } from "next/navigation";
+import Link from "next/link";
 
 export function Header() {
   const pathname = usePathname();
-  
+
   // Remove empty segments and format the path segments
-  const pathSegments = pathname
-    .split("/")
-    .filter(Boolean)
-    .map((segment) => ({
-      label: segment.charAt(0).toUpperCase() + segment.slice(1).replace(/-/g, " "),
-      href: `/${pathname
-        .split("/")
-        .slice(0, pathname.split("/").indexOf(segment) + 1)
-        .join("/")}`,
-    }));
+  const rawSegments = pathname.split("/").filter(Boolean);
+  let accumulatedPath = "";
+  const pathSegments = rawSegments.map((segment) => {
+    accumulatedPath += `/${segment}`;
+    return {
+      label:
+        segment.charAt(0).toUpperCase() + segment.slice(1).replace(/-/g, " "),
+      href: accumulatedPath,
+    };
+  });
 
   return (
     <header className="flex h-16 shrink-0 items-center gap-2 justify-between transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-14 sticky top-0 z-50 bg-background">
@@ -38,17 +39,15 @@ export function Header() {
         <Breadcrumb>
           <BreadcrumbList>
             {pathSegments.map((segment, index) => (
-              <BreadcrumbItem key={segment.href} className="hidden md:block">
+              <BreadcrumbItem key={segment.href}>
                 {index < pathSegments.length - 1 ? (
-                  <BreadcrumbLink href={segment.href}>
-                    {segment.label}
+                  <BreadcrumbLink asChild href={segment.href}>
+                    <Link href={segment.href}>{segment.label}</Link>
                   </BreadcrumbLink>
                 ) : (
                   <BreadcrumbPage>{segment.label}</BreadcrumbPage>
                 )}
-                {index < pathSegments.length - 1 && (
-                  <BreadcrumbSeparator className="hidden md:block" />
-                )}
+                {index < pathSegments.length - 1 && <BreadcrumbSeparator />}
               </BreadcrumbItem>
             ))}
           </BreadcrumbList>
