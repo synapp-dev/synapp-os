@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { ChevronsDown, Plus } from "lucide-react";
+import { ChevronsUpDown, FolderGit2, Plus } from "lucide-react";
 
 import {
   DropdownMenu,
@@ -9,7 +9,6 @@ import {
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
-  DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import {
@@ -18,21 +17,26 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
+import { useProjectScope } from "@/stores/project-scope";
+import { useOrganisation } from "@/stores/organisation";
 
-export function ProjectSwitcher({
-  projects,
-}: {
-  projects: {
-    name: string;
-    icon: React.ElementType;
-    url: string;
-    type?: string;
-  }[];
-}) {
+export function ProjectSwitcher() {
   const { isMobile } = useSidebar();
-  const [activeProject, setActiveProject] = React.useState(projects[0]);
+  const { currentOrganisation } = useOrganisation();
+  const { projects, isLoading, fetchProjects } = useProjectScope();
 
-  if (!activeProject) {
+  React.useEffect(() => {
+    if (currentOrganisation?.id) {
+      fetchProjects(currentOrganisation.id);
+    }
+  }, [currentOrganisation?.id, fetchProjects]);
+
+  const handleCreateProject = () => {
+    // TODO: Implement create project functionality
+    console.log("Create project clicked");
+  };
+
+  if (!currentOrganisation) {
     return null;
   }
 
@@ -42,23 +46,25 @@ export function ProjectSwitcher({
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <SidebarMenuButton
-              size="default"
+              size="lg"
               className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
             >
-              <div className="text-sidebar-primary-foreground border border-sidebar-primary flex aspect-square size-6 items-center justify-center rounded-lg">
-                <activeProject.icon className="size-3" />
+              <div className="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg">
+                <FolderGit2 className="size-4" />
               </div>
               <div className="grid flex-1 text-left text-sm leading-tight">
-                <p className="truncate font-medium">
-                  {activeProject.name}
-                </p>
-                {activeProject.type && (
-                  <p className="text-xs text-muted-foreground">
-                    {activeProject.type}
-                  </p>
-                )}
+                <span className="truncate font-medium">
+                  {isLoading
+                    ? "Loading..."
+                    : projects.length > 0
+                    ? projects[0].project_name
+                    : "No project selected"}
+                </span>
+                <span className="truncate text-xs text-muted-foreground">
+                  {currentOrganisation.name}
+                </span>
               </div>
-              <ChevronsDown className="ml-auto" />
+              <ChevronsUpDown className="ml-auto" />
             </SidebarMenuButton>
           </DropdownMenuTrigger>
           <DropdownMenuContent
@@ -70,27 +76,30 @@ export function ProjectSwitcher({
             <DropdownMenuLabel className="text-muted-foreground text-xs">
               Projects
             </DropdownMenuLabel>
-            {projects.map((project, index) => (
-              <DropdownMenuItem
-                key={project.name}
-                onClick={() => setActiveProject(project)}
-                className="gap-2 p-2"
-              >
-                <div className="flex size-6 items-center justify-center rounded-md border">
-                  <project.icon className="size-3.5 shrink-0" />
+
+            {projects.map((project) => (
+              <DropdownMenuItem key={project.project_id} className="gap-2 p-2">
+                <div className="flex size-6 items-center justify-center rounded-md border bg-transparent">
+                  <FolderGit2 className="size-4" />
                 </div>
-                {project.name}
-                <DropdownMenuShortcut>⌘{index + 1}</DropdownMenuShortcut>
+                <div className="grid">
+                  <div className="font-medium">{project.project_name}</div>
+                  <div className="text-xs text-muted-foreground">
+                    {project.role_name}
+                  </div>
+                </div>
               </DropdownMenuItem>
             ))}
+
             <DropdownMenuSeparator />
-            <DropdownMenuItem className="gap-2 p-2">
+            <DropdownMenuItem
+              className="gap-2 p-2"
+              onClick={handleCreateProject}
+            >
               <div className="flex size-6 items-center justify-center rounded-md border bg-transparent">
                 <Plus className="size-4" />
               </div>
-              <div className="text-muted-foreground font-medium">
-                Add project
-              </div>
+              <div className="font-medium">Create project</div>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
