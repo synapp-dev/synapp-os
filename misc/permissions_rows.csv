@@ -1,0 +1,69 @@
+id,action,description
+0220af5e-f414-447f-a7dd-7cb7de5e088e,access_files_deliverables,Can access Deliverables page
+0344cf7a-7120-4a9b-a0d9-73851116561a,access_files_assets,Can access Assets page
+0708f794-d785-443e-9855-ac37ef20ab7f,view_nav_timeline,Can see Timeline in navigation
+088dd924-53df-4c41-a734-604d9646f3f7,access_settings_notifications,Can access Notifications page
+0cff2c75-b1a5-46ba-82d5-24c73c6164cc,access_files_contracts,Can access Contracts page
+0d338475-44b7-4804-af24-022211ea6340,view_nav_calendar_milestones,Can see Milestones in navigation
+15525385-d7f2-4f8e-9fd4-9af7c9470278,view_nav_calendar_meetings,Can see Meetings in navigation
+1aec884c-6de1-4fcb-9659-cbcd86966dba,view_nav_tasks,Can see Tasks in navigation
+1edc5834-bf48-439d-b022-3432a81cce2c,access_files,Can access Files page
+2cca1b05-dc6b-47fe-aa0a-e909a2c3e9b0,view_nav_requests,Can see Requests in navigation
+323cb640-5309-452e-a6a4-6eaf5a55042a,view_nav_files_deliverables,Can see Deliverables in navigation
+390e7c61-a684-4deb-bb66-c77002cfdcce,view_nav_tasks_completed,Can see Completed Tasks in navigation
+3ae66ce2-27a5-43c7-b2b2-393866a8174e,view_nav_requests_completed,Can see Completed Requests in navigation
+3f631c79-189a-495c-907e-23248a486baa,view_nav_timeline_changelog,Can see Changelog in navigation
+4099be5a-95db-4086-8397-7b013d3c9540,access_tasks_completed,Can access Completed Tasks page
+438a71d1-579f-4c9c-8166-13d475540564,access_timeline_progress,Can access Progress page
+47c4c956-5ae6-49af-9daa-b6d17ebfdc1f,view_nav_settings_permissions,Can see Permissions in navigation
+4a4c8fb9-a529-452e-ab77-d0faed4339aa,view_nav_about_general,Can see General in navigation
+4aa05b1a-d61e-4401-b296-2b4d35648605,access_calendar_sprints,Can access Sprints page
+4c3811c3-3dbb-4167-9953-12018c54aef9,view_nav_files_assets,Can see Assets in navigation
+4ceb854b-61c0-446c-bec9-1adfe7527b47,view_nav_files_invoices,Can see Invoices in navigation
+4f732827-99b0-49f6-a4d6-1f8c9e4314e6,view_nav_timeline_progress,Can see Progress in navigation
+5023b5c6-d702-4737-83ca-d7370954ca75,access_settings,Can access Settings page
+56cace5c-891b-4f13-a9bb-fd56ce1e3582,access_calendar_meetings,Can access Meetings page
+5b76deb2-e335-4aef-afc9-ac59b9f8c90c,access_requests,Can access Requests page
+63d55def-12df-4b3b-a3e6-57e530187444,view_nav_about_limits,Can see Limits in navigation
+6698a55b-a04a-4fe9-8bbe-46e4f0cdd9e2,view_nav_files,Can see Files in navigation
+697fccea-6aec-415a-aca8-ed017baa39cd,access_support_terms,Can access Terms page
+6ae1a320-4c85-4953-8502-867e6471f739,access_tasks,Can access Tasks page
+7c957011-e575-4982-a2f9-f91fc809dfd9,access_timeline_changelog,Can access Changelog page
+7ef7752c-042d-4adf-ab12-2495da0911cb,view_nav_calendar,Can see Calendar in navigation
+816728e1-59d3-414f-bd33-5cff27d0102f,view_nav_settings_brand,Can see Brand in navigation
+87a93254-abc5-418a-a6a3-52d98a7b192d,access_timeline,Can access Timeline page
+887b4970-ef74-45fc-baf5-a176949a672b,access_calendar_milestones,Can access Milestones page
+8c55e6b2-8032-4cd5-8119-dda2546f59ff,access_support_faq,Can access FAQ page
+8e660e91-08d3-4470-9374-8eb5610697ec,access_files_invoices,Can access Invoices page
+9384ef94-0705-4afb-a038-5612a6689e0d,view_nav_settings_notifications,Can see Notifications in navigation
+94b96548-2007-47bb-9dce-32b766a6a583,view_nav_files_quotes,Can see Quotes in navigation
+9b8ab39b-7ed2-43a6-8218-d37448bf6e6d,view_nav_requests_pending,Can see Pending Requests in navigation
+a238d5e7-3710-40a0-a09c-d58ab397135f,access_tasks_current,Can access Current Tasks page
+a72ff422-d135-4c1c-9248-46f0d04a0177,view_nav_calendar_sprints,Can see Sprints in navigation
+a7e44dce-35ef-411c-98c2-173e44b5df1d,view_nav_about_billing,Can see Billing in navigation
+a84d8f06-2059-4a33-b641-e8e0e0825e94,access_support_privacy,Can access Privacy page
+a9473bed-4afd-4ce0-8144-21ec82c3c9d6,access_settings_brand,Can access Brand page
+aa875046-6874-4728-8a61-b72ce0560bf3,access_dashboard,Can access Dashboard page
+ad1e9cd1-897d-4407-a82f-22ad29340ae6,access_support,Can access Support page
+b29429dc-529d-41ad-a9e7-d60ebb285593,view_nav_support,Can see Support in navigation
+b73910e9-238a-4840-bb32-519a724f1d25,view_nav_settings_team,Can see Team in navigation
+b9b31f8a-9e9c-47ac-991a-9f92709f5a2b,access_about,Can access About page
+bb085a3c-be80-4949-9288-55c010cc49fd,view_nav_tasks_current,Can see Current Tasks in navigation
+bbf333f6-9227-46ac-8e8c-d717726c240a,access_support_contact,Can access Contact page
+c09fccf3-c9b9-478f-a168-e9c1aa363ad9,access_about_limits,Can access Limits page
+c75d66c1-011f-431d-bb89-7ce7f06b0244,view_nav_support_privacy,Can see Privacy in navigation
+c9a1a586-0291-4e3b-85dc-a797376e40da,view_nav_settings,Can see Settings in navigation
+cac886aa-52a1-45f6-bf3d-ff545a71ce42,access_settings_permissions,Can access Permissions page
+cce1927b-1775-4cc0-b835-b0fe52bf1fd3,view_nav_files_contracts,Can see Contracts in navigation
+d1827f5a-95db-4eae-aaef-4d447c717a42,view_nav_support_terms,Can see Terms in navigation
+d33fab05-75eb-4568-9153-63b1bb041c25,access_about_general,Can access General page
+d4927ef0-af3b-4f5c-9940-dfa91e65f729,view_nav_dashboard,Can see Dashboard in navigation
+d4ef088b-c97c-4f3f-9223-07c318cff391,access_requests_completed,Can access Completed Requests page
+d56a6589-3da7-42f6-9d8a-92be2baccf5a,access_requests_pending,Can access Pending Requests page
+d9780c4a-6ed6-4a06-8ef4-1420d0803673,access_settings_team,Can access Team page
+e3c640b7-539b-42b1-bd70-ca440dffcbda,view_nav_about,Can see About in navigation
+e95bf4c8-5286-4614-9d60-c7b1a574fa80,access_about_billing,Can access Billing page
+ede89f8e-5aa7-453c-a610-cf0467a07faf,view_nav_support_faq,Can see FAQ in navigation
+ef2a04af-e1c6-45be-8e6e-344215534e1f,access_calendar,Can access Calendar page
+f2118077-43c1-4858-90dc-e94c998b2ba5,access_files_quotes,Can access Quotes page
+fd3556fa-ef5a-4c75-8384-e2beeb1e8052,view_nav_support_contact,Can see Contact in navigation
