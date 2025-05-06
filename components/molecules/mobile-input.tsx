@@ -1,22 +1,21 @@
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
-interface EmailInputProps {
+interface MobileInputProps {
   value: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-export function EmailInput({ value, onChange }: EmailInputProps) {
+export function MobileInput({ value, onChange }: MobileInputProps) {
   return (
     <div className="grid gap-2">
-      <Label htmlFor="email" className="text-xs text-muted-foreground pl-1">
-        Email
+      <Label htmlFor="mobile" className="text-xs text-muted-foreground pl-1">
+        Mobile Number
       </Label>
       <Input
-        id="email"
-        type="email"
-        placeholder="m@example.com"
-        required
+        id="mobile"
+        type="tel"
+        placeholder="+1 (555) 000-0000"
         value={value}
         onChange={onChange}
       />
