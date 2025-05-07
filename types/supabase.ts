@@ -397,6 +397,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      check_project_name: {
+        Args: { p_name: string; p_org_id: string }
+        Returns: boolean
+      }
       get_user_nav_routes: {
         Args: { project_id: string }
         Returns: {
