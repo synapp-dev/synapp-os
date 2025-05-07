@@ -63,6 +63,8 @@ export function useNavigation(projectId: string) {
   const [error, setError] = useState<string | null>(null);
   const [navGroups, setNavGroups] = useState<NavGroup[]>([]);
 
+  console.log("projectId being used is", projectId);
+
   useEffect(() => {
     async function fetchNavigation() {
       try {
@@ -71,6 +73,7 @@ export function useNavigation(projectId: string) {
         const { data, error } = await supabase.rpc("get_user_nav_routes", {
           project_id: projectId,
         });
+        console.log(projectId, data);
         if (error) throw error;
         setNavData(data || []);
         // Group by unique nav_group_order

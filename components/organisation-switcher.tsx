@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { Building2, ChevronsUpDown, Plus } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 import {
   DropdownMenu,
@@ -22,6 +23,7 @@ import { useOrganisationStore } from "@/stores/organisation-scope";
 
 export function OrganisationSwitcher() {
   const { isMobile } = useSidebar();
+  const router = useRouter();
   const {
     getOrganisations,
     getActiveOrganisation,
@@ -43,7 +45,19 @@ export function OrganisationSwitcher() {
   };
 
   const handleOrganisationSelect = (orgId: string) => {
-    setActiveOrganisation(orgId);
+    const selectedOrg = organisations.find(
+      (org) => org.organisation_id === orgId
+    );
+    if (selectedOrg) {
+      setActiveOrganisation(orgId);
+      // Update the URL with the new organisation slug
+      const currentPath = window.location.pathname;
+      const newPath = currentPath.replace(
+        /\/[^/]+/,
+        `/${selectedOrg.organisation_slug}`
+      );
+      router.push(newPath);
+    }
   };
 
   if (isLoading) {

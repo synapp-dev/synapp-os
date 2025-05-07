@@ -4,7 +4,6 @@ import { ReactNode } from "react";
 
 interface SettingsPageTemplateProps {
   title?: string;
-  columns?: number;
   customItems?: {
     title: string;
     content?: ReactNode;
@@ -25,34 +24,71 @@ const defaultCardTitles = [
   "Example Card J",
   "Example Card K",
   "Example Card L",
+  "Example Card M",
+  "Example Card N",
+  "Example Card O",
 ];
 
-function getRandomHeight() {
-  const heights = [150, 200, 250, 300, 350];
-  return heights[Math.floor(Math.random() * heights.length)];
+const possibleHeights = [150, 275, 325, 375, 425];
+const maxPerHeight = 3;
+
+function generateHeights(numItems: number) {
+  const heights: number[] = [];
+  const usage: Record<number, number> = Object.fromEntries(
+    possibleHeights.map((h) => [h, 0])
+  );
+  let usedSet = new Set<number>();
+
+  for (let i = 0; i < numItems; i++) {
+    // Get available heights: not used 3 times and not in usedSet
+    const available = possibleHeights.filter(
+      (h) => usage[h] < maxPerHeight && !usedSet.has(h)
+    );
+    if (available.length === 0) {
+      // All 5 have been used, reset the usedSet
+      usedSet = new Set<number>();
+      // Recompute available
+      const fallback = possibleHeights.filter((h) => usage[h] < maxPerHeight);
+      if (fallback.length === 0) break; // All used up
+      // Pick a random fallback
+      const h = fallback[Math.floor(Math.random() * fallback.length)];
+      heights.push(h);
+      usage[h]++;
+      usedSet.add(h);
+      continue;
+    }
+    // Pick a random available height
+    const h = available[Math.floor(Math.random() * available.length)];
+    heights.push(h);
+    usage[h]++;
+    usedSet.add(h);
+  }
+  return heights;
 }
 
 export function SettingsPageTemplate({
   title,
-  columns = 3,
   customItems,
 }: SettingsPageTemplateProps) {
   const items =
     customItems ||
-    defaultCardTitles.map((title) => ({
-      title,
-      height: getRandomHeight(),
-    }));
+    (() => {
+      const heights = generateHeights(defaultCardTitles.length);
+      return defaultCardTitles.map((title, i) => ({
+        title,
+        height: heights[i],
+      }));
+    })();
 
   return (
     <div className="">
       {title && <h1 className="text-2xl font-bold mb-6">{title}</h1>}
-      <div className={`columns-${columns} gap-4 space-y-4`}>
+      <div className="columns-1 sm:columns-2 2xl:columns-3 gap-4">
         {items.map((item, index) => (
           <StaggeredAnimation key={item.title} index={index}>
             <Card
               key={index}
-              className="mb-4 break-inside-avoid"
+              className="break-inside-avoid mb-4"
               style={{ height: item.height ? `${item.height}px` : undefined }}
             >
               <CardHeader>

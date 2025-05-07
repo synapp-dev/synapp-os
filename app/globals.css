@@ -86,10 +86,23 @@
     }
   }
 
+  @keyframes bounce-pulse {
+    0%,
+    100% {
+      transform: translateY(0);
+      opacity: 1;
+    }
+    50% {
+      transform: translateY(-4px);
+      opacity: 0.7;
+    }
+  }
+
   --animate-slide-down-fade-in: slide-down-fade-in 0.3s ease-out;
   --animate-slide-up-fade-in: slide-up-fade-in 0.3s ease-out;
   --animate-slide-left-fade-in: slide-left-fade-in 0.3s ease-out;
   --animate-slide-right-fade-in: slide-right-fade-in 0.3s ease-out;
+  --animate-bounce-pulse: bounce-pulse 2s ease-in-out infinite;
 }
 
 :root {

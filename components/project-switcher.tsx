@@ -1,7 +1,14 @@
 "use client";
 
 import * as React from "react";
-import { ChevronsUpDown, FolderGit2, Plus } from "lucide-react";
+import {
+  ChevronsUpDown,
+  FolderGit2,
+  Plus,
+  MousePointer2,
+  LoaderPinwheel,
+} from "lucide-react";
+import { useRouter } from "next/navigation";
 
 import {
   DropdownMenu,
@@ -22,8 +29,10 @@ import { useOrganisation } from "@/stores/organisation";
 
 export function ProjectSwitcher() {
   const { isMobile } = useSidebar();
+  const router = useRouter();
   const { currentOrganisation } = useOrganisation();
-  const { projects, isLoading, fetchProjects } = useProjectScope();
+  const { projects, isLoading, fetchProjects, activeProjectId, selectProject } =
+    useProjectScope();
 
   React.useEffect(() => {
     if (currentOrganisation?.id) {
@@ -49,19 +58,44 @@ export function ProjectSwitcher() {
               size="lg"
               className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
             >
-              <div className="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg">
-                <FolderGit2 className="size-4" />
+              <div
+                className={`flex aspect-square size-8 items-center justify-center rounded-lg transition-all duration-1000 ${
+                  isLoading || !activeProjectId
+                    ? "border border-muted"
+                    : "border-sidebar-primary border"
+                }`}
+              >
+                {isLoading ? (
+                  <LoaderPinwheel className="size-4 animate-spin" />
+                ) : !activeProjectId ? (
+                  <MousePointer2 className="size-4 animate-[var(--animate-bounce-pulse)]" />
+                ) : (
+                  <FolderGit2 className="size-4" />
+                )}
               </div>
               <div className="grid flex-1 text-left text-sm leading-tight">
-                <span className="truncate font-medium">
-                  {isLoading
-                    ? "Loading..."
-                    : projects.length > 0
-                    ? projects[0].project_name
-                    : "No project selected"}
+                <span
+                  className="truncate font-medium animate-slide-left-fade-in"
+                  key={activeProjectId}
+                >
+                  {isLoading ? (
+                    <p className="animate-slide-down-fade-in text-muted-foreground">
+                      Loading...
+                    </p>
+                  ) : projects.length > 0 ? (
+                    projects.find((p) => p.project_id === activeProjectId)
+                      ?.project_name || (
+                      <div className="animate-pulse">Select a project</div>
+                    )
+                  ) : (
+                    "No projects available"
+                  )}
                 </span>
                 <span className="truncate text-xs text-muted-foreground">
-                  {currentOrganisation.name}
+                  {activeProjectId
+                    ? projects.find((p) => p.project_id === activeProjectId)
+                        ?.role_name
+                    : currentOrganisation.name}
                 </span>
               </div>
               <ChevronsUpDown className="ml-auto" />
@@ -78,7 +112,11 @@ export function ProjectSwitcher() {
             </DropdownMenuLabel>
 
             {projects.map((project) => (
-              <DropdownMenuItem key={project.project_id} className="gap-2 p-2">
+              <DropdownMenuItem
+                key={project.project_id}
+                className="gap-2 p-2"
+                onClick={() => selectProject(project.project_id, router)}
+              >
                 <div className="flex size-6 items-center justify-center rounded-md border bg-transparent">
                   <FolderGit2 className="size-4" />
                 </div>

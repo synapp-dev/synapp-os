@@ -16,19 +16,11 @@ import { Separator } from "@/components/ui/separator";
 import { NavSection } from "@/components/nav-section";
 import { useNavigation } from "@/hooks/use-navigation";
 import { useProjectScope } from "@/stores/project-scope";
-
-// This is sample data for user
-const data = {
-  user: {
-    name: "Aaron Girton",
-    email: "aaron@synapp.com.au",
-    avatar: "/avatars/shadcn.jpg",
-  },
-};
+import { LoaderPinwheel } from "lucide-react";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  const { projects } = useProjectScope();
-  const activeProject = projects[0]; // Get the first project as active for now
+  const { getActiveProject } = useProjectScope();
+  const activeProject = getActiveProject();
   const { navSections, isLoading, error } = useNavigation(
     activeProject?.project_id || ""
   );
@@ -43,8 +35,12 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <div className="px-2 pt-4">
           <ProjectSwitcher />
         </div>
-        {isLoading ? (
-          <div className="p-4 text-center">Loading navigation...</div>
+        {!activeProject ? (
+          <></>
+        ) : isLoading ? (
+          <div className="p-4 text-muted-foreground text-sm animate-pulse w-full flex justify-center items-center">
+            <LoaderPinwheel className="w-4 h-4 animate-spin" />
+          </div>
         ) : error ? (
           <div className="p-4 text-center text-red-500">{error}</div>
         ) : navSections.length === 0 ? (
@@ -52,13 +48,17 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             No navigation items available
           </div>
         ) : (
-          navSections
-            .filter((section) => section.items && section.items.length > 0)
-            .map((section) => <NavSection key={section.id} {...section} />)
+          <div key={activeProject.project_id}>
+            {navSections
+              .filter((section) => section.items && section.items.length > 0)
+              .map((section) => (
+                <NavSection key={section.id} {...section} />
+              ))}
+          </div>
         )}
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={data.user} />
+        <NavUser />
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>

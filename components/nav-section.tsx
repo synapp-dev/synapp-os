@@ -19,13 +19,24 @@ import {
   SidebarMenuSub,
 } from "@/components/ui/sidebar";
 import type { NavItem } from "@/hooks/use-navigation";
+import { useOrganisation } from "@/stores/organisation";
+import { useProject } from "@/stores/project";
+import { StaggeredAnimation } from "./atoms/staggered-animation";
 
 // Helper to check if any descendant is active
-function isDescendantActive(item: NavItem, pathname: string): boolean {
-  if (pathname === `/${item.url}`) return true;
+function isDescendantActive(
+  item: NavItem,
+  pathname: string,
+  orgSlug?: string,
+  projectSlug?: string
+): boolean {
+  const fullPath = `/${orgSlug}/${projectSlug}/${item.url}`;
+  if (pathname === fullPath) return true;
+
   return (
-    item.items?.some((child: NavItem) => isDescendantActive(child, pathname)) ??
-    false
+    item.items?.some((child: NavItem) =>
+      isDescendantActive(child, pathname, orgSlug, projectSlug)
+    ) ?? false
   );
 }
 
@@ -37,20 +48,39 @@ export function NavSection({
   items: NavItem[];
 }) {
   const pathname = usePathname();
+  const { currentOrganisation } = useOrganisation();
+  const { currentProject } = useProject();
 
   React.useEffect(() => {
     console.log("Current pathname:", pathname);
   }, [pathname]);
 
   return (
+    // <StaggeredAnimation index={title.length}>
     <SidebarGroup>
-      <SidebarGroupLabel>{title}</SidebarGroupLabel>
+      <SidebarGroupLabel className="animate-slide-left-fade-in">
+        {title}
+      </SidebarGroupLabel>
       <SidebarMenu>
-        {items.map((item) => (
-          <NavItemRecursive key={item.url} item={item} pathname={pathname} />
+        {items.map((item, index) => (
+          <StaggeredAnimation
+            key={`${item.url}-${item.title}`}
+            index={index}
+            incrementDelay={0.1}
+            fadeDirection="up"
+          >
+            <NavItemRecursive
+              key={`${item.url}-${item.title}`}
+              item={item}
+              pathname={pathname}
+              orgSlug={currentOrganisation?.slug}
+              projectSlug={currentProject?.slug}
+            />
+          </StaggeredAnimation>
         ))}
       </SidebarMenu>
     </SidebarGroup>
+    // </StaggeredAnimation>
   );
 }
 
@@ -58,15 +88,24 @@ function NavItemRecursive({
   item,
   pathname,
   isChild = false,
+  orgSlug,
+  projectSlug,
 }: {
   item: NavItem;
   pathname: string;
   isChild?: boolean;
+  orgSlug?: string;
+  projectSlug?: string;
 }) {
+  const { currentOrganisation } = useOrganisation();
+  const { currentProject } = useProject();
+
   // Check if this item or any descendant is active
-  const isActive = pathname === `/${item.url}`;
+  const isActive =
+    pathname ===
+    `/${currentOrganisation?.slug}/${currentProject?.slug}/${item.url}`;
   const hasActiveChild = item.items?.some((child: NavItem) =>
-    isDescendantActive(child, pathname)
+    isDescendantActive(child, pathname, orgSlug, projectSlug)
   );
   const isOpen = isActive || hasActiveChild;
   const hasChildren = item.items && item.items.length > 0;
@@ -89,7 +128,9 @@ function NavItemRecursive({
               isActive ? "text-foreground" : "",
             ].join(" ")}
           >
-            <Link href={`/${item.url}`}>
+            <Link
+              href={`/${currentOrganisation?.slug}/${currentProject?.slug}/${item.url}`}
+            >
               {item.icon && (
                 <item.icon
                   className={
@@ -112,10 +153,12 @@ function NavItemRecursive({
             <SidebarMenuSub>
               {item.items?.map((child: NavItem) => (
                 <NavItemRecursive
-                  key={child.url}
+                  key={`${child.url}-${child.title}`}
                   item={child}
                   pathname={pathname}
                   isChild={true}
+                  orgSlug={orgSlug}
+                  projectSlug={projectSlug}
                 />
               ))}
             </SidebarMenuSub>
