@@ -1,9 +1,7 @@
 import { create } from 'zustand';
 import { createClient } from '@/utils/supabase/client';
 import { useOrganisation } from './organisation';
-import { Database } from '@/types/supabase';
-
-type Json = Database['public']['Enums']['json'];
+import { Json } from '@/types/supabase';
 
 type OrganisationSubscription = {
   organisation_id: string;

@@ -429,6 +429,26 @@ export type Database = {
         Args: Record<PropertyKey, never>
         Returns: string[]
       }
+      get_user_profile: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          biography_description: string | null
+          biography_title: string | null
+          birthday: string | null
+          business_number: string | null
+          created_at: string | null
+          email: string
+          first_name: string | null
+          id: string
+          last_name: string | null
+          linkedin_url: string | null
+          location: string | null
+          mobile_number: string | null
+          position_title: string | null
+          profile_picture_url: string | null
+          settings: Json | null
+        }[]
+      }
       get_user_project_scope: {
         Args: { org_id: string }
         Returns: {
