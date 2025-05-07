@@ -1,5 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { createClient } from "@/utils/supabase/server";
+import { orgProjectAuthMiddleware } from "./middleware/org-project-auth";
 
 export async function middleware(request: NextRequest) {
   const supabase = await createClient();
@@ -18,6 +19,12 @@ export async function middleware(request: NextRequest) {
   // redirect the user to /dashboard
   if (session && (request.nextUrl.pathname === "/auth" || request.nextUrl.pathname === "/")) {
     return NextResponse.redirect(new URL("/dashboard", request.url));
+  }
+
+  // Check organization and project access for protected routes
+  const orgProjectAuthResult = await orgProjectAuthMiddleware(request);
+  if (orgProjectAuthResult.status !== 200) {
+    return orgProjectAuthResult;
   }
 
   return NextResponse.next();
