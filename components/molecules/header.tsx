@@ -12,6 +12,7 @@ import { ThemeToggle } from "@/components/atoms/theme-toggle";
 import { RightSidebarTrigger } from "@/components/ui/right-sidebar-trigger";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
+import { CommandMenu } from "@/components/molecules/command-menu";
 
 export function Header() {
   const pathname = usePathname();
@@ -54,6 +55,8 @@ export function Header() {
         </Breadcrumb>
       </div>
       <div className="flex items-center gap-2 px-4">
+        <CommandMenu />
+        <div className="w-0.5 h-0.5 bg-muted-foreground rounded-full mx-2" />
         <ThemeToggle />
         <RightSidebarTrigger />
       </div>

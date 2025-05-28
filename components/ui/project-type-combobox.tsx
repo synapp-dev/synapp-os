@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/command"
 import {
   Popover,
-  PopoverContent,
+  PopoverContentNoPortal,
   PopoverTrigger,
 } from "@/components/ui/popover"
 
@@ -72,7 +72,7 @@ export function ProjectTypeCombobox({
   const [open, setOpen] = React.useState(false)
 
   return (
-    <Popover open={open} onOpenChange={setOpen} modal>
+    <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <Button
           variant="outline"
@@ -86,9 +86,9 @@ export function ProjectTypeCombobox({
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="p-0 w-(--radix-popover-trigger-width)">
+      <PopoverContentNoPortal className="p-0 w-(--radix-popover-trigger-width)">
         <Command>
-          <CommandInput placeholder="Search project type..." className="h-9 z-50"/>
+          <CommandInput placeholder="Search project type..." className="h-9"/>
           <CommandList>
             <CommandEmpty>No project type found.</CommandEmpty>
             <CommandGroup>
@@ -113,7 +113,7 @@ export function ProjectTypeCombobox({
             </CommandGroup>
           </CommandList>
         </Command>
-      </PopoverContent>
+      </PopoverContentNoPortal>
     </Popover>
   )
 } 

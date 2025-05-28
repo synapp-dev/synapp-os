@@ -113,8 +113,8 @@ export function AuthForm({ className, ...props }: React.ComponentProps<"div">) {
                 </h1>
                 <p className="text-muted-foreground text-sm">
                   {mode === "login"
-                    ? "Login to your Synapp account"
-                    : "Sign up for a new Synapp account"}
+                    ? "Login to your synapp account"
+                    : "Sign up for a new synapp account"}
                 </p>
               </div>
               {error && (
