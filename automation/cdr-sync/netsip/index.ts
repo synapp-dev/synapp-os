@@ -68,14 +68,10 @@ async function syncCDRsForDate(dateStr: string) {
 
 (async () => {
   const today = new Date();
+  const date = new Date(today);
+  date.setDate(today.getDate() - 50);
+  const dateStr = date.toISOString().split("T")[0];
 
-  for (let i = 50; i >= 0; i--) {
-    const date = new Date(today);
-    date.setDate(today.getDate() - i);
-    const dateStr = date.toISOString().split("T")[0];
-
-    await syncCDRsForDate(dateStr);
-  }
-
-  console.log("✅ All dates processed.");
+  await syncCDRsForDate(dateStr);
+  console.log("✅ Date processed.");
 })();

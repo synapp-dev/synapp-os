@@ -5,7 +5,7 @@
  * including project fetching, selection, and permission management.
  */
 
-import { createClient } from "@/utils/supabase/client";
+import { createBrowserClient } from "@/utils/supabase/client";
 import { create } from "zustand";
 import { Json } from "@/types/supabase";
 import { useProject } from "@/stores/project";
@@ -81,7 +81,7 @@ export const useProjectScope = create<ProjectScopeStore>((set, get) => ({
     try {
       set({ isLoading: true, error: null });
       
-      const supabase = createClient();
+      const supabase = createBrowserClient();
       
       const { data, error } = await supabase.rpc("get_user_project_scope", {
         org_id: orgId,

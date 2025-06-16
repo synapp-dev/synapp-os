@@ -1,7 +1,8 @@
 import { create } from 'zustand';
-import { createClient } from '@/utils/supabase/client';
+
 import { useOrganisation } from './organisation';
 import { Json } from '@/types/supabase';
+import { createBrowserClient } from '@/utils/supabase/client';
 
 type OrganisationSubscription = {
   organisation_id: string;
@@ -36,7 +37,7 @@ export const useOrganisationStore = create<OrganisationState>((set, get) => ({
   fetchSubscriptions: async () => {
     set({ isLoading: true, error: null });
     try {
-      const supabase = createClient();
+      const supabase = createBrowserClient();
       
       const { data, error } = await supabase.rpc('get_user_org_scope');
       

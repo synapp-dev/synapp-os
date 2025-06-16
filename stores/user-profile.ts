@@ -1,6 +1,7 @@
 import { create } from "zustand";
-import { createClient } from "@/utils/supabase/client";
+
 import { Database } from "@/types/supabase";
+import { createBrowserClient } from "@/utils/supabase/client";
 
 type UserProfile = Database['public']['Tables']['user_profiles']['Row'];
 
@@ -21,7 +22,7 @@ export const useUserProfile = create<UserProfileStore>((set) => ({
     set({ loading: true, error: null });
     try {
       // Get auth user first
-      const supabase = createClient();
+      const supabase = createBrowserClient();
       const { data: { session }, error: sessionError } = await supabase.auth.getSession();
       
       if (sessionError) {
