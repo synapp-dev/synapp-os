@@ -14,7 +14,8 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Run Netsip ingestion
-        shell: pwsh
-        run: ./misc/fetch-Netsip-CDRs.ps1 `
-          -SupabaseUrl "${{ secrets.SUPABASE_URL }}" `
-          -SupabaseServiceRoleKey "${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}"
+        shell: powershell
+        run: |
+          ./misc/fetch-Netsip-CDRs.ps1 `
+            -SupabaseUrl "${{ secrets.SUPABASE_URL }}" `
+            -SupabaseServiceRoleKey "${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}"
