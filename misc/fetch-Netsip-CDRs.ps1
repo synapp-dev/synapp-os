@@ -73,7 +73,7 @@ if (-not $supabaseSuccess) {
 # Step 3: Write summary log
 $LogContent = @"
 Date: $(Get-Date -Format "yyyy-MM-dd HH:mm:ss")
-Status: $($Success -eq $true ? "SUCCESS" : "FAILURE")
+Status: $(if ($Success -eq $true) { "SUCCESS" } else { "FAILURE" })
 Records Inserted: $InsertedCount
 Error: $ErrorMessage
 "@
