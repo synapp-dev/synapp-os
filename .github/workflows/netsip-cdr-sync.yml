@@ -23,9 +23,10 @@ jobs:
             -SupabaseServiceRoleKey "${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}"
 
       - name: Commit & push logs
+        shell: powershell
         run: |
           git config --global user.name "netsip-bot"
           git config --global user.email "ci@netsip.local"
           git add logs/*.txt
-          git commit -m "CDR sync log for $(date +'%Y-%m-%d')" || echo "Nothing to commit"
+          git commit -m "CDR sync log for $(Get-Date -Format 'yyyy-MM-dd')" || echo "Nothing to commit"
           git push origin master
