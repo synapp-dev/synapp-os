@@ -40,7 +40,6 @@ export const useUserProfile = create<UserProfileStore>((set) => ({
       const { data: userProfile, error: profileError } = await supabase
         .rpc('get_user_profile').maybeSingle();
 
-      console.log("userProfile", userProfile);
 
       if (profileError) {
         console.error("Profile error:", profileError);

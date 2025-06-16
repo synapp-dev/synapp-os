@@ -87,9 +87,6 @@ export const useProjectScope = create<ProjectScopeStore>((set, get) => ({
         org_id: orgId,
       });
 
-      console.log("Project scope data:", data);
-      console.log("Project scope error:", error);
-
       if (error) throw error;
 
       set({ projects: data, isLoading: false });

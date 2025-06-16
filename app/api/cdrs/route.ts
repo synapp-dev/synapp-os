@@ -19,4 +19,4 @@ export async function GET() {
     console.error('Error executing Node.js script:', error);
     return NextResponse.json({ error: 'Failed to fetch CDR data' }, { status: 500 });
   }
-} 
+}
