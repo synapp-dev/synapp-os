@@ -1,10 +1,11 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { Check, ChevronsUpDown } from "lucide-react"
+import * as React from "react";
+import { Check, ChevronsUpDown } from "lucide-react";
+import { createClient } from "@/utils/supabase/client";
 
-import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 import {
   Command,
   CommandEmpty,
@@ -12,56 +13,23 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from "@/components/ui/command"
+} from "@/components/ui/command";
 import {
   Popover,
-  PopoverContentNoPortal,
+  PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover"
+} from "@/components/ui/popover";
 
-export const projectTypes = [
-  {
-    value: "web-app",
-    label: "Web Application",
-  },
-  {
-    value: "mobile-app",
-    label: "Mobile Application",
-  },
-  {
-    value: "saas",
-    label: "SaaS Platform",
-  },
-  {
-    value: "ecommerce",
-    label: "E-commerce",
-  },
-  {
-    value: "api",
-    label: "API Development",
-  },
-  {
-    value: "cms",
-    label: "Content Management System",
-  },
-  {
-    value: "marketplace",
-    label: "Marketplace Platform",
-  },
-  {
-    value: "dashboard",
-    label: "Analytics Dashboard",
-  },
-  {
-    value: "other",
-    label: "Other",
-  },
-]
+interface ProjectType {
+  id: string;
+  name: string;
+  description: string | null;
+}
 
 interface ProjectTypeComboboxProps {
-  value: string
-  onValueChange: (value: string) => void
-  className?: string
+  value: string;
+  onValueChange: (value: string) => void;
+  className?: string;
 }
 
 export function ProjectTypeCombobox({
@@ -69,7 +37,27 @@ export function ProjectTypeCombobox({
   onValueChange,
   className,
 }: ProjectTypeComboboxProps) {
-  const [open, setOpen] = React.useState(false)
+  const [open, setOpen] = React.useState(false);
+  const [projectTypes, setProjectTypes] = React.useState<ProjectType[]>([]);
+
+  React.useEffect(() => {
+    const fetchProjectTypes = async () => {
+      try {
+        const supabase = createClient();
+        const { data, error } = await supabase
+          .from("project_types")
+          .select("id, name, description")
+          .order("name");
+
+        if (error) throw error;
+        setProjectTypes(data || []);
+      } catch (error) {
+        console.error("Error fetching project types:", error);
+      }
+    };
+
+    fetchProjectTypes();
+  }, []);
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -81,31 +69,31 @@ export function ProjectTypeCombobox({
           className={cn("w-full justify-between", className)}
         >
           {value
-            ? projectTypes.find((type) => type.value === value)?.label
+            ? projectTypes.find((type) => type.id === value)?.name
             : "Select project type..."}
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContentNoPortal className="p-0 w-(--radix-popover-trigger-width)">
+      <PopoverContent className="p-0 w-(--radix-popover-trigger-width)">
         <Command>
-          <CommandInput placeholder="Search project type..." className="h-9"/>
+          <CommandInput placeholder="Search project type..." className="h-9" />
           <CommandList>
             <CommandEmpty>No project type found.</CommandEmpty>
             <CommandGroup>
               {projectTypes.map((type) => (
                 <CommandItem
-                  key={type.value}
-                  value={type.value}
+                  key={type.id}
+                  value={type.id}
                   onSelect={(currentValue) => {
-                    onValueChange(currentValue === value ? "" : currentValue)
-                    setOpen(false)
+                    onValueChange(currentValue === value ? "" : currentValue);
+                    setOpen(false);
                   }}
                 >
-                  {type.label}
+                  {type.name}
                   <Check
                     className={cn(
                       "ml-auto h-4 w-4",
-                      value === type.value ? "opacity-100" : "opacity-0"
+                      value === type.id ? "opacity-100" : "opacity-0"
                     )}
                   />
                 </CommandItem>
@@ -113,7 +101,7 @@ export function ProjectTypeCombobox({
             </CommandGroup>
           </CommandList>
         </Command>
-      </PopoverContentNoPortal>
+      </PopoverContent>
     </Popover>
-  )
-} 
+  );
+}

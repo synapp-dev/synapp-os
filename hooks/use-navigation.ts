@@ -63,15 +63,13 @@ export function useNavigation(projectId: string) {
   const [error, setError] = useState<string | null>(null);
   const [navGroups, setNavGroups] = useState<NavGroup[]>([]);
 
-  console.log("projectId being used is", projectId);
-
   useEffect(() => {
     async function fetchNavigation() {
       try {
         setIsLoading(true);
         const supabase = createClient();
-        const { data, error } = await supabase.rpc("get_user_nav_routes", {
-          project_id: projectId,
+        const { data, error } = await supabase.rpc("get_user_project_nav_items", {
+          active_project_id: projectId,
         });
         console.log(projectId, data);
         if (error) throw error;

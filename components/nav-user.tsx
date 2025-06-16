@@ -39,23 +39,15 @@ export function NavUser() {
     useUserProfile();
 
   useEffect(() => {
-    console.log("Fetching current user...");
     fetchCurrentUser();
   }, [fetchCurrentUser]);
-
-  console.log("currentUser", currentUser);
-  console.log("authEmail", authEmail);
-  console.log("loading", loading);
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
     router.push("/auth");
   };
 
-  console.log("NavUser render:", { currentUser, authEmail, loading });
-
   if (loading && !currentUser && !authEmail) {
-    console.log("Returning null due to loading state");
     return null;
   }
 
@@ -65,8 +57,6 @@ export function NavUser() {
     : authEmail || "";
 
   const displayEmail = currentUser?.email || authEmail || "";
-
-  console.log("Display values:", { displayName, displayEmail });
 
   return (
     <SidebarMenu>

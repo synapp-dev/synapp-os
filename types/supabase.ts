@@ -84,6 +84,96 @@ export type Database = {
         }
         Relationships: []
       }
+      project_type_route_role_permissions: {
+        Row: {
+          can_access: boolean | null
+          can_view: boolean | null
+          id: string
+          project_type_route_id: string
+          role_id: string
+        }
+        Insert: {
+          can_access?: boolean | null
+          can_view?: boolean | null
+          id?: string
+          project_type_route_id: string
+          role_id: string
+        }
+        Update: {
+          can_access?: boolean | null
+          can_view?: boolean | null
+          id?: string
+          project_type_route_id?: string
+          role_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "project_type_route_role_permissions_project_type_route_id_fkey"
+            columns: ["project_type_route_id"]
+            isOneToOne: false
+            referencedRelation: "project_type_routes"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "project_type_route_role_permissions_role_id_fkey"
+            columns: ["role_id"]
+            isOneToOne: false
+            referencedRelation: "roles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      project_type_routes: {
+        Row: {
+          id: string
+          project_type_id: string
+          route_id: string
+        }
+        Insert: {
+          id?: string
+          project_type_id: string
+          route_id: string
+        }
+        Update: {
+          id?: string
+          project_type_id?: string
+          route_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "project_type_routes_project_type_id_fkey"
+            columns: ["project_type_id"]
+            isOneToOne: false
+            referencedRelation: "project_types"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "project_type_routes_route_id_fkey"
+            columns: ["route_id"]
+            isOneToOne: false
+            referencedRelation: "routes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      project_types: {
+        Row: {
+          description: string | null
+          id: string
+          name: string
+        }
+        Insert: {
+          description?: string | null
+          id?: string
+          name: string
+        }
+        Update: {
+          description?: string | null
+          id?: string
+          name?: string
+        }
+        Relationships: []
+      }
       projects: {
         Row: {
           created_at: string | null
@@ -92,6 +182,7 @@ export type Database = {
           metadata: Json | null
           name: string
           organisation_id: string
+          project_type_id: string | null
           slug: string | null
           status: string | null
         }
@@ -102,6 +193,7 @@ export type Database = {
           metadata?: Json | null
           name: string
           organisation_id: string
+          project_type_id?: string | null
           slug?: string | null
           status?: string | null
         }
@@ -112,6 +204,7 @@ export type Database = {
           metadata?: Json | null
           name?: string
           organisation_id?: string
+          project_type_id?: string | null
           slug?: string | null
           status?: string | null
         }
@@ -121,6 +214,13 @@ export type Database = {
             columns: ["organisation_id"]
             isOneToOne: false
             referencedRelation: "organisations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "projects_project_type_id_fkey"
+            columns: ["project_type_id"]
+            isOneToOne: false
+            referencedRelation: "project_types"
             referencedColumns: ["id"]
           },
         ]
@@ -189,58 +289,42 @@ export type Database = {
       }
       routes: {
         Row: {
-          access_permission_id: string | null
           description: string | null
           id: string
           lucide_icon: string | null
           method: string | null
-          nav_group: string | null
           nav_group_id: string | null
           nav_label: string | null
           nav_order: number | null
           parent_id: string | null
           path: string
           rollout_at: string | null
-          view_permission_id: string | null
         }
         Insert: {
-          access_permission_id?: string | null
           description?: string | null
           id?: string
           lucide_icon?: string | null
           method?: string | null
-          nav_group?: string | null
           nav_group_id?: string | null
           nav_label?: string | null
           nav_order?: number | null
           parent_id?: string | null
           path: string
           rollout_at?: string | null
-          view_permission_id?: string | null
         }
         Update: {
-          access_permission_id?: string | null
           description?: string | null
           id?: string
           lucide_icon?: string | null
           method?: string | null
-          nav_group?: string | null
           nav_group_id?: string | null
           nav_label?: string | null
           nav_order?: number | null
           parent_id?: string | null
           path?: string
           rollout_at?: string | null
-          view_permission_id?: string | null
         }
         Relationships: [
-          {
-            foreignKeyName: "routes_access_permission_id_fkey"
-            columns: ["access_permission_id"]
-            isOneToOne: false
-            referencedRelation: "permissions"
-            referencedColumns: ["id"]
-          },
           {
             foreignKeyName: "routes_nav_group_id_fkey"
             columns: ["nav_group_id"]
@@ -255,11 +339,196 @@ export type Database = {
             referencedRelation: "routes"
             referencedColumns: ["id"]
           },
+        ]
+      }
+      sc_carriers: {
+        Row: {
+          base_url: string
+          id: string
+          is_active: boolean | null
+          name: string
+        }
+        Insert: {
+          base_url: string
+          id?: string
+          is_active?: boolean | null
+          name: string
+        }
+        Update: {
+          base_url?: string
+          id?: string
+          is_active?: boolean | null
+          name?: string
+        }
+        Relationships: []
+      }
+      sc_cdr_imports: {
+        Row: {
+          carrier_id: string
+          ended_at: string
+          error: string | null
+          id: string
+          record_count: number | null
+          started_at: string
+          status: string | null
+          trigger_type: string
+          triggered_by: string | null
+        }
+        Insert: {
+          carrier_id: string
+          ended_at: string
+          error?: string | null
+          id?: string
+          record_count?: number | null
+          started_at: string
+          status?: string | null
+          trigger_type?: string
+          triggered_by?: string | null
+        }
+        Update: {
+          carrier_id?: string
+          ended_at?: string
+          error?: string | null
+          id?: string
+          record_count?: number | null
+          started_at?: string
+          status?: string | null
+          trigger_type?: string
+          triggered_by?: string | null
+        }
+        Relationships: [
           {
-            foreignKeyName: "routes_view_permission_id_fkey"
-            columns: ["view_permission_id"]
+            foreignKeyName: "sc_cdr_imports_carrier_id_fkey"
+            columns: ["carrier_id"]
             isOneToOne: false
-            referencedRelation: "permissions"
+            referencedRelation: "sc_carriers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "sc_cdr_imports_triggered_by_fkey"
+            columns: ["triggered_by"]
+            isOneToOne: false
+            referencedRelation: "user_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      sc_consolidated_cdrs: {
+        Row: {
+          billable: number | null
+          billed_duration: number | null
+          call_direction: string
+          call_id: string
+          call_state: string
+          carrier_id: string
+          cost: number
+          destination_number: string
+          divert_reason: string | null
+          duration_seconds: number
+          hash: string
+          id: string
+          import_id: string | null
+          org_id: string | null
+          rate_plan: string | null
+          raw_cdr_id: string | null
+          site_id: string | null
+          source_number: string
+          start_time: string
+        }
+        Insert: {
+          billable?: number | null
+          billed_duration?: number | null
+          call_direction: string
+          call_id: string
+          call_state: string
+          carrier_id: string
+          cost: number
+          destination_number: string
+          divert_reason?: string | null
+          duration_seconds: number
+          hash: string
+          id?: string
+          import_id?: string | null
+          org_id?: string | null
+          rate_plan?: string | null
+          raw_cdr_id?: string | null
+          site_id?: string | null
+          source_number: string
+          start_time: string
+        }
+        Update: {
+          billable?: number | null
+          billed_duration?: number | null
+          call_direction?: string
+          call_id?: string
+          call_state?: string
+          carrier_id?: string
+          cost?: number
+          destination_number?: string
+          divert_reason?: string | null
+          duration_seconds?: number
+          hash?: string
+          id?: string
+          import_id?: string | null
+          org_id?: string | null
+          rate_plan?: string | null
+          raw_cdr_id?: string | null
+          site_id?: string | null
+          source_number?: string
+          start_time?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sc_consolidated_cdrs_carrier_id_fkey"
+            columns: ["carrier_id"]
+            isOneToOne: false
+            referencedRelation: "sc_carriers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "sc_consolidated_cdrs_import_id_fkey"
+            columns: ["import_id"]
+            isOneToOne: false
+            referencedRelation: "sc_cdr_imports"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "sc_consolidated_cdrs_raw_cdr_id_fkey"
+            columns: ["raw_cdr_id"]
+            isOneToOne: false
+            referencedRelation: "sc_raw_cdr_logs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      sc_raw_cdr_logs: {
+        Row: {
+          carrier_id: string
+          fetched_at: string
+          id: string
+          metadata: Json | null
+          payload: Json
+        }
+        Insert: {
+          carrier_id: string
+          fetched_at?: string
+          id?: string
+          metadata?: Json | null
+          payload: Json
+        }
+        Update: {
+          carrier_id?: string
+          fetched_at?: string
+          id?: string
+          metadata?: Json | null
+          payload?: Json
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sc_raw_cdr_logs_carrier_id_fkey"
+            columns: ["carrier_id"]
+            isOneToOne: false
+            referencedRelation: "sc_carriers"
             referencedColumns: ["id"]
           },
         ]
@@ -401,6 +670,10 @@ export type Database = {
         Args: { p_name: string; p_org_id: string }
         Returns: boolean
       }
+      check_user_can_access_route: {
+        Args: { project_id: string; route_path: string }
+        Returns: boolean
+      }
       get_user_nav_routes: {
         Args: { project_id: string }
         Returns: {
@@ -451,6 +724,23 @@ export type Database = {
           position_title: string | null
           profile_picture_url: string | null
           settings: Json | null
+        }[]
+      }
+      get_user_project_nav_items: {
+        Args: { active_project_id: string }
+        Returns: {
+          id: string
+          path: string
+          nav_label: string
+          nav_group_id: string
+          nav_group_name: string
+          nav_group_label: string
+          nav_group_order: number
+          nav_order: number
+          lucide_icon: string
+          parent_id: string
+          can_view: boolean
+          can_access: boolean
         }[]
       }
       get_user_project_scope: {

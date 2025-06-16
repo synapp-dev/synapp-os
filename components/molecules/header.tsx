@@ -13,6 +13,7 @@ import { RightSidebarTrigger } from "@/components/ui/right-sidebar-trigger";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { CommandMenu } from "@/components/molecules/command-menu";
+import { ChevronRight } from "lucide-react";
 
 export function Header() {
   const pathname = usePathname();
@@ -48,7 +49,9 @@ export function Header() {
                 ) : (
                   <BreadcrumbPage>{segment.label}</BreadcrumbPage>
                 )}
-                {index < pathSegments.length - 1 && <BreadcrumbSeparator />}
+                {index < pathSegments.length - 1 && (
+                  <ChevronRight className="w-3 h-3" />
+                )}
               </BreadcrumbItem>
             ))}
           </BreadcrumbList>
