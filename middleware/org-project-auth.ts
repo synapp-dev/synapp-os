@@ -1,8 +1,8 @@
 import { NextResponse, type NextRequest } from "next/server";
-import { createClient } from "@/utils/supabase/server";
+import { createServerClient } from "@/utils/supabase/server";
 
 export async function orgProjectAuthMiddleware(request: NextRequest) {
-  const supabase = await createClient();
+  const supabase = await createServerClient();
   
   // Extract organization and project slugs from the URL
   const pathParts = request.nextUrl.pathname.split('/').filter(Boolean);
