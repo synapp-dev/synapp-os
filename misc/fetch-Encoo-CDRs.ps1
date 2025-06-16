@@ -1,5 +1,5 @@
 # Get credentials from environment variables
-$User = $env:NEXT_PUBLIC_ENCOO_USER
+$User = $env:NEXT_PUBLIC_ENCOO_USERNAME
 $Password = $env:NEXT_PUBLIC_ENCOO_PASSWORD
 
 # Update the URL with yesterday's date

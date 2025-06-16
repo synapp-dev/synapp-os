@@ -2,7 +2,7 @@ name: Netsip CDR Sync
 
 on:
   schedule:
-    - cron: "0 */8 * * *" # Every 8 hours
+    - cron: "0 */8 * * *"
   workflow_dispatch:
 
 jobs:
@@ -17,5 +17,15 @@ jobs:
         shell: powershell
         run: |
           ./misc/fetch-Netsip-CDRs.ps1 `
+            -User "${{ secrets.NETSIP_USERNAME }}" `
+            -Password "${{ secrets.NETSIP_PASSWORD }}" `
             -SupabaseUrl "${{ secrets.SUPABASE_URL }}" `
             -SupabaseServiceRoleKey "${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}"
+
+      - name: Commit & push logs
+        run: |
+          git config --global user.name "netsip-bot"
+          git config --global user.email "ci@netsip.local"
+          git add logs/*.txt
+          git commit -m "CDR sync log for $(date +'%Y-%m-%d')" || echo "Nothing to commit"
+          git push origin master
