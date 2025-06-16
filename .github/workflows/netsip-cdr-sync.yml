@@ -1,0 +1,20 @@
+name: Netsip CDR Sync
+
+on:
+  schedule:
+    - cron: "0 */8 * * *" # Every 8 hours
+  workflow_dispatch:
+
+jobs:
+  fetch-cdrs:
+    runs-on: self-hosted
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Run Netsip ingestion
+        shell: pwsh
+        run: ./misc/fetch-Netsip-CDRs.ps1 `
+          -SupabaseUrl "${{ secrets.SUPABASE_URL }}" `
+          -SupabaseServiceRoleKey "${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}"

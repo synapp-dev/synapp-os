@@ -755,6 +755,10 @@ export type Database = {
           permissions: Json
         }[]
       }
+      ingest_netsip_cdrs: {
+        Args: { payload: string; trigger_type?: string; triggered_by?: string }
+        Returns: Json
+      }
     }
     Enums: {
       [_ in never]: never
