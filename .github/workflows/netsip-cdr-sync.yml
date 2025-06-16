@@ -30,9 +30,14 @@ jobs:
           NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
 
       - name: Commit & push logs (optional)
+        shell: powershell
         run: |
           git config --global user.name "netsip-bot"
           git config --global user.email "ci@netsip.local"
           git add logs/*.txt
-          git commit -m "CDR sync log for $(date +'%Y-%m-%d')" || echo "Nothing to commit"
-          git push origin master
+          if (-not (git diff --cached --quiet)) {
+            git commit -m "CDR sync log for $(Get-Date -Format 'yyyy-MM-dd')"
+            git push origin master
+          } else {
+            Write-Host "Nothing to commit"
+          }
