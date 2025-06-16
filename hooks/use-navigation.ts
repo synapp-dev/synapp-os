@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { createClient } from "@/utils/supabase/client";
+import { createBrowserClient } from "@/utils/supabase/client";
 import * as Icons from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 
@@ -67,7 +67,7 @@ export function useNavigation(projectId: string) {
     async function fetchNavigation() {
       try {
         setIsLoading(true);
-        const supabase = createClient();
+        const supabase = createBrowserClient();
         const { data, error } = await supabase.rpc("get_user_project_nav_items", {
           active_project_id: projectId,
         });

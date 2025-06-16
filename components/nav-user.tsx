@@ -29,12 +29,12 @@ import {
 
 import { useRouter } from "next/navigation";
 import { useUserProfile } from "@/stores/user-profile";
-import { createClient } from "@/utils/supabase/client";
+import { createBrowserClient } from "@/utils/supabase/client";
 
 export function NavUser() {
   const { isMobile } = useSidebar();
   const router = useRouter();
-  const supabase = createClient();
+  const supabase = createBrowserClient();
   const { currentUser, authEmail, loading, fetchCurrentUser } =
     useUserProfile();
 

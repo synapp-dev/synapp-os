@@ -10,7 +10,7 @@ import { MobileInput } from "@/components/molecules/mobile-input";
 import { SocialLoginGroup } from "@/components/molecules/social-login-group";
 import { AuthDivider } from "@/components/atoms/auth-divider";
 import { AuthFooter } from "@/components/molecules/auth-footer";
-import { createClient } from "@/utils/supabase/client";
+import { createBrowserClient } from "@/utils/supabase/client";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 
@@ -29,7 +29,7 @@ export function AuthForm({ className, ...props }: React.ComponentProps<"div">) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const mode = (searchParams.get("mode") as AuthMode) || "login";
-  const supabase = createClient();
+  const supabase = createBrowserClient();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
