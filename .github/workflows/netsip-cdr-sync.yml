@@ -2,7 +2,7 @@ name: Netsip CDR Sync
 
 on:
   schedule:
-    - cron: "0 */8 * * *"
+    - cron: "0 */8 * * *" # Every 8 hours
   workflow_dispatch:
 
 jobs:
@@ -13,20 +13,26 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v3
 
-      - name: Run Netsip ingestion
-        shell: powershell
-        run: |
-          ./misc/fetch-Netsip-CDRs.ps1 `
-            -User "${{ secrets.NETSIP_USERNAME }}" `
-            -Password "${{ secrets.NETSIP_PASSWORD }}" `
-            -SupabaseUrl "${{ secrets.SUPABASE_URL }}" `
-            -SupabaseServiceRoleKey "${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}"
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20
 
-      - name: Commit & push logs
-        shell: powershell
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run Netsip CDR sync
+        run: npx tsx automation/cdr-sync/netsip/index.ts
+        env:
+          NETSIP_USERNAME: ${{ secrets.NETSIP_USERNAME }}
+          NETSIP_PASSWORD: ${{ secrets.NETSIP_PASSWORD }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+
+      - name: Commit & push logs (optional)
         run: |
           git config --global user.name "netsip-bot"
           git config --global user.email "ci@netsip.local"
           git add logs/*.txt
-          git commit -m "CDR sync log for $(Get-Date -Format 'yyyy-MM-dd')" || echo "Nothing to commit"
+          git commit -m "CDR sync log for $(date +'%Y-%m-%d')" || echo "Nothing to commit"
           git push origin master
