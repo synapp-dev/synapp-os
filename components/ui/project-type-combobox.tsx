@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { Check, ChevronsUpDown } from "lucide-react";
-import { createClient } from "@/utils/supabase/client";
+import { createBrowserClient } from "@/utils/supabase/client";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -43,7 +43,7 @@ export function ProjectTypeCombobox({
   React.useEffect(() => {
     const fetchProjectTypes = async () => {
       try {
-        const supabase = createClient();
+        const supabase = createBrowserClient();
         const { data, error } = await supabase
           .from("project_types")
           .select("id, name, description")

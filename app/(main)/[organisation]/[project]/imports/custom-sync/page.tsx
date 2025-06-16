@@ -13,14 +13,14 @@ import {
 } from "@/components/ui/card";
 import { Alert } from "@/components/ui/alert";
 import { Loader2 } from "lucide-react";
-import { createClient } from "@/utils/supabase/client";
+import { createBrowserClient } from "@/utils/supabase/client";
 
 export default function CustomSyncPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
 
-  const supabase = createClient();
+  const supabase = createBrowserClient();
 
   const handleManualImport = async () => {
     setIsLoading(true);

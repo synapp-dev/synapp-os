@@ -18,16 +18,21 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { createClient } from "@/utils/supabase/client";
+
 import { cn } from "@/lib/utils";
 import { z } from "zod";
 import { ProjectTypeCombobox } from "@/components/ui/project-type-combobox";
+import { createBrowserClient } from "@/utils/supabase/client";
 
 const projectNameSchema = z.object({
-  name: z.string()
+  name: z
+    .string()
     .min(3, "Project name must be at least 3 characters")
     .max(35, "Project name must be less than 35 characters")
-    .regex(/^[a-zA-Z0-9\s\-_]+$/, "Project name can only contain letters, numbers, spaces, hyphens, and underscores")
+    .regex(
+      /^[a-zA-Z0-9\s\-_]+$/,
+      "Project name can only contain letters, numbers, spaces, hyphens, and underscores"
+    ),
 });
 
 export default function Organisation() {
@@ -43,13 +48,11 @@ export default function Organisation() {
   const [isCheckingName, setIsCheckingName] = useState(false);
   const [isNameAvailable, setIsNameAvailable] = useState(true);
   const [nameError, setNameError] = useState<string | null>(null);
-  const supabase = createClient();
+  const supabase = createBrowserClient();
 
   // Generate slug from project name
   const generateSlug = (name: string) => {
-    return name
-      .toLowerCase()
-      .replace(/[^a-z0-9]/g, '');
+    return name.toLowerCase().replace(/[^a-z0-9]/g, "");
   };
 
   // Validate project name
@@ -69,14 +72,13 @@ export default function Organisation() {
   // Check if project name is unique
   const checkProjectName = async (name: string) => {
     if (!name || !currentOrganisation?.id) return;
-    
+
     setIsCheckingName(true);
     try {
-      const { data, error } = await supabase
-        .rpc('check_project_name', {
-          p_name: name,
-          p_org_id: currentOrganisation.id
-        });
+      const { data, error } = await supabase.rpc("check_project_name", {
+        p_name: name,
+        p_org_id: currentOrganisation.id,
+      });
 
       if (error) {
         console.error("Error checking project name:", error);
@@ -133,11 +135,11 @@ export default function Organisation() {
     if (!isNameAvailable || !validateProjectName(projectName)) return;
 
     // TODO: Implement project creation logic
-    console.log("Creating project:", { 
-      projectName, 
+    console.log("Creating project:", {
+      projectName,
       projectDescription,
       projectType,
-      slug: generateSlug(projectName)
+      slug: generateSlug(projectName),
     });
     setIsCreateSheetOpen(false);
     setProjectName("");
@@ -161,7 +163,10 @@ export default function Organisation() {
       </div>
 
       <Sheet open={isCreateSheetOpen} onOpenChange={setIsCreateSheetOpen}>
-        <SheetContent side="top" className="h-fit max-w-md rounded-b-lg mx-auto inset-x-0 [&_[data-overlay-wrapper]]:bg-black/90">
+        <SheetContent
+          side="top"
+          className="h-fit max-w-md rounded-b-lg mx-auto inset-x-0 [&_[data-overlay-wrapper]]:bg-black/90"
+        >
           <SheetHeader>
             <SheetTitle className="flex items-center gap-2">
               <FolderGit2 className="h-4 w-4" />
@@ -172,16 +177,27 @@ export default function Organisation() {
             <div className="space-y-2">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <Label htmlFor="projectName" className="text-xs text-muted-foreground ml-2">Project Name</Label>
-                  <span className={cn(
-                    "text-xs",
-                    projectName.length > 0 && projectName.length < 3 ? "text-orange-500" : "text-muted-foreground"
-                  )}>
+                  <Label
+                    htmlFor="projectName"
+                    className="text-xs text-muted-foreground ml-2"
+                  >
+                    Project Name
+                  </Label>
+                  <span
+                    className={cn(
+                      "text-xs",
+                      projectName.length > 0 && projectName.length < 3
+                        ? "text-orange-500"
+                        : "text-muted-foreground"
+                    )}
+                  >
                     {projectName.length}/35
                   </span>
                 </div>
                 {projectName && (
-                  <span className="font-mono text-xs text-muted-foreground">/{generateSlug(projectName)}</span>
+                  <span className="font-mono text-xs text-muted-foreground">
+                    /{generateSlug(projectName)}
+                  </span>
                 )}
               </div>
               <div className="relative">
@@ -195,51 +211,80 @@ export default function Organisation() {
                   maxLength={35}
                   className={cn(
                     "focus-visible:ring-offset-0",
-                    !isNameAvailable ? "border-red-500 focus-visible:ring-red-500" : "",
-                    isNameAvailable && projectName.length >= 3 ? "border-green-500 focus-visible:ring-green-500" : "",
-                    nameError ? "border-red-500 focus-visible:ring-red-500" : "",
-                    projectName.length > 0 && projectName.length < 3 ? "border-orange-500 focus-visible:ring-orange-500" : ""
+                    !isNameAvailable
+                      ? "border-red-500 focus-visible:ring-red-500"
+                      : "",
+                    isNameAvailable && projectName.length >= 3
+                      ? "border-green-500 focus-visible:ring-green-500"
+                      : "",
+                    nameError
+                      ? "border-red-500 focus-visible:ring-red-500"
+                      : "",
+                    projectName.length > 0 && projectName.length < 3
+                      ? "border-orange-500 focus-visible:ring-orange-500"
+                      : ""
                   )}
                 />
                 {isCheckingName ? (
                   <Loader2 className="absolute right-3 top-2 h-5 w-5 animate-spin text-muted-foreground" />
-                ) : projectName && projectName.length >= 3 && (
-                  isNameAvailable ? (
+                ) : (
+                  projectName &&
+                  projectName.length >= 3 &&
+                  (isNameAvailable ? (
                     <CheckCircle2 className="absolute right-3 top-2 h-5 w-5 text-green-500" />
                   ) : (
                     <XCircle className="absolute right-3 top-2 h-5 w-5 text-red-500" />
-                  )
+                  ))
                 )}
               </div>
-              {nameError && (
-                <p className="text-xs text-red-500">{nameError}</p>
-              )}
+              {nameError && <p className="text-xs text-red-500">{nameError}</p>}
               {!isNameAvailable && !nameError && (
-                <p className="text-xs text-red-500">This project name is already taken</p>
+                <p className="text-xs text-red-500">
+                  This project name is already taken
+                </p>
               )}
-              {projectName.length > 0 && projectName.length < 3 && !nameError && (
-                <p className="text-xs text-orange-500">Project name must be at least 3 characters</p>
-              )}
+              {projectName.length > 0 &&
+                projectName.length < 3 &&
+                !nameError && (
+                  <p className="text-xs text-orange-500">
+                    Project name must be at least 3 characters
+                  </p>
+                )}
             </div>
             <div className="space-y-2">
-              <Label htmlFor="projectType" className="text-xs text-muted-foreground ml-2">Project Type</Label>
+              <Label
+                htmlFor="projectType"
+                className="text-xs text-muted-foreground ml-2"
+              >
+                Project Type
+              </Label>
               <ProjectTypeCombobox
                 value={projectType}
                 onValueChange={setProjectType}
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="projectDescription" className="text-xs text-muted-foreground ml-2">Description</Label>
+              <Label
+                htmlFor="projectDescription"
+                className="text-xs text-muted-foreground ml-2"
+              >
+                Description
+              </Label>
               <Textarea
                 id="projectDescription"
                 value={projectDescription}
-                onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setProjectDescription(e.target.value)}
+                onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
+                  setProjectDescription(e.target.value)
+                }
                 placeholder="Enter project description"
                 rows={3}
               />
             </div>
             <SheetFooter className="mt-6">
-              <Button type="submit" disabled={!isNameAvailable || isCheckingName}>
+              <Button
+                type="submit"
+                disabled={!isNameAvailable || isCheckingName}
+              >
                 Create Project
               </Button>
             </SheetFooter>
