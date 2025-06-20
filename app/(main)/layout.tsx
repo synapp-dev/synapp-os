@@ -15,7 +15,7 @@ export default function MainLayout({
     <SidebarProvider>
       <RightSidebarProvider>
         <AppSidebar />
-        <div className="flex flex-col flex-1">
+        <div className="flex flex-col flex-1 max-w-7xl mx-auto">
           <Header />
           <SidebarInset>
             <div className="px-6 py-3">{children}</div>
