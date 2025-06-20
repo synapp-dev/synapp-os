@@ -18,7 +18,7 @@ export default function RoutesPage() {
   const data = getData();
 
   return (
-    <>
+    <div className="flex flex-col gap-4">
       <div>
         <h1 className="text-2xl font-bold">Routes</h1>
         <p>
@@ -30,6 +30,6 @@ export default function RoutesPage() {
       <div>
         <DataTable columns={columns} data={data} />
       </div>
-    </>
+    </div>
   );
 }
