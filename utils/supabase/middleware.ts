@@ -1,6 +1,6 @@
 import { createServerClient } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
-import { orgProjectAuthMiddleware } from '@/middleware/org-project-auth'
+import { userRouteAccessMiddleware } from '@/middleware/user-route-access'
 
 export async function updateSession(request: NextRequest) {
   let supabaseResponse = NextResponse.next({
@@ -50,9 +50,9 @@ export async function updateSession(request: NextRequest) {
   }
 
   // Check organization and project access for protected routes
-  const orgProjectAuthResult = await orgProjectAuthMiddleware(request)
-  if (orgProjectAuthResult.status !== 200) {
-    return orgProjectAuthResult
+  const routeAccessResult = await userRouteAccessMiddleware(request)
+  if (routeAccessResult.status !== 200) {
+    return routeAccessResult
   }
 
   // IMPORTANT: You *must* return the supabaseResponse object as it is.

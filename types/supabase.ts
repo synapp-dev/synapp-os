@@ -671,8 +671,27 @@ export type Database = {
         Returns: boolean
       }
       check_user_can_access_route: {
-        Args: { project_id: string; route_path: string }
+        Args:
+          | {
+              org_slug: string
+              project_slug?: string
+              parent_route?: string
+              sub_route?: string
+            }
+          | { project_id: string; route_path: string }
         Returns: boolean
+      }
+      get_organisation_id_by_slug: {
+        Args: { slug: string }
+        Returns: string
+      }
+      get_project_id_by_slug: {
+        Args: { slug: string }
+        Returns: string
+      }
+      get_route_id_by_path: {
+        Args: { route_path: string; parent?: string }
+        Returns: string
       }
       get_user_nav_routes: {
         Args: { project_id: string }
@@ -702,6 +721,10 @@ export type Database = {
           role_name: string
         }[]
       }
+      get_user_organisation_access: {
+        Args: { org_id: string; uid?: string }
+        Returns: boolean
+      }
       get_user_permissions: {
         Args: Record<PropertyKey, never>
         Returns: string[]
@@ -726,6 +749,10 @@ export type Database = {
           settings: Json | null
         }[]
       }
+      get_user_project_access: {
+        Args: { project_id: string; uid?: string }
+        Returns: boolean
+      }
       get_user_project_nav_items: {
         Args: { active_project_id: string }
         Returns: {
@@ -742,6 +769,10 @@ export type Database = {
           can_view: boolean
           can_access: boolean
         }[]
+      }
+      get_user_project_role_id: {
+        Args: { project_id: string; uid?: string }
+        Returns: string
       }
       get_user_project_scope: {
         Args: { org_id: string }
