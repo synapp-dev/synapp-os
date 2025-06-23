@@ -11,7 +11,8 @@ export async function userRouteAccessMiddleware(request: NextRequest) {
   if (pathParts.length >= 1 && 
       !request.nextUrl.pathname.startsWith('/login') && 
       !request.nextUrl.pathname.startsWith('/auth') &&
-      !request.nextUrl.pathname.startsWith('/api')) {
+      !request.nextUrl.pathname.startsWith('/api') &&
+      !request.nextUrl.pathname.startsWith('/not-found')) {
     
     const orgSlug = pathParts[0];
     const projectSlug = pathParts.length >= 2 ? pathParts[1] : undefined;
@@ -29,14 +30,14 @@ export async function userRouteAccessMiddleware(request: NextRequest) {
       console.error('Error checking route access:', error);
       // On error, redirect to 404 or error page
       const url = request.nextUrl.clone();
-      url.pathname = '/404';
+      url.pathname = '/not-found';
       return NextResponse.redirect(url);
     }
 
     if (!canAccess) {
       // User doesn't have access, redirect to 404
       const url = request.nextUrl.clone();
-      url.pathname = '/404';
+      url.pathname = '/not-found';
       return NextResponse.redirect(url);
     }
   }

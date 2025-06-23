@@ -160,16 +160,19 @@ export type Database = {
         Row: {
           description: string | null
           id: string
+          lucide_icon: string | null
           name: string
         }
         Insert: {
           description?: string | null
           id?: string
+          lucide_icon?: string | null
           name: string
         }
         Update: {
           description?: string | null
           id?: string
+          lucide_icon?: string | null
           name?: string
         }
         Relationships: []
@@ -562,6 +565,8 @@ export type Database = {
           first_name: string | null
           id: string
           last_name: string | null
+          last_org_id: string | null
+          last_project_id: string | null
           linkedin_url: string | null
           location: string | null
           mobile_number: string | null
@@ -579,6 +584,8 @@ export type Database = {
           first_name?: string | null
           id: string
           last_name?: string | null
+          last_org_id?: string | null
+          last_project_id?: string | null
           linkedin_url?: string | null
           location?: string | null
           mobile_number?: string | null
@@ -596,6 +603,8 @@ export type Database = {
           first_name?: string | null
           id?: string
           last_name?: string | null
+          last_org_id?: string | null
+          last_project_id?: string | null
           linkedin_url?: string | null
           location?: string | null
           mobile_number?: string | null
@@ -603,7 +612,22 @@ export type Database = {
           profile_picture_url?: string | null
           settings?: Json | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "user_profiles_last_org_id_fkey"
+            columns: ["last_org_id"]
+            isOneToOne: false
+            referencedRelation: "organisations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_profiles_last_project_id_fkey"
+            columns: ["last_project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       user_roles: {
         Row: {
@@ -671,15 +695,47 @@ export type Database = {
         Returns: boolean
       }
       check_user_can_access_route: {
-        Args:
-          | {
-              org_slug: string
-              project_slug?: string
-              parent_route?: string
-              sub_route?: string
-            }
-          | { project_id: string; route_path: string }
+        Args: {
+          org_slug: string
+          project_slug?: string
+          parent_route?: string
+          sub_route?: string
+        }
         Returns: boolean
+      }
+      get_all_project_types: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          description: string | null
+          id: string
+          lucide_icon: string | null
+          name: string
+        }[]
+      }
+      get_all_roles: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          description: string | null
+          id: string
+          name: string
+          scope_id: string
+        }[]
+      }
+      get_all_routes__admin: {
+        Args: { org_slug: string; project_slug: string }
+        Returns: {
+          id: string
+          path: string
+          parent_id: string
+          method: string
+          description: string
+          nav_label: string
+          nav_order: number
+          lucide_icon: string
+          rollout_at: string
+          nav_group_label: string
+          nav_group_order: number
+        }[]
       }
       get_organisation_id_by_slug: {
         Args: { slug: string }
@@ -689,9 +745,28 @@ export type Database = {
         Args: { slug: string }
         Returns: string
       }
+      get_project_type_route_role_permissions_by_role_id: {
+        Args: { arg_role_id: string; arg_project_type_id: string }
+        Returns: {
+          route_id: string
+        }[]
+      }
       get_route_id_by_path: {
         Args: { route_path: string; parent?: string }
         Returns: string
+      }
+      get_routes_by_project_type_id: {
+        Args: { arg_project_type_id?: string }
+        Returns: {
+          route_id: string
+        }[]
+      }
+      get_user_last_view_or_default_redirect: {
+        Args: { uid?: string }
+        Returns: {
+          org_slug: string
+          project_slug: string
+        }[]
       }
       get_user_nav_routes: {
         Args: { project_id: string }
@@ -741,6 +816,8 @@ export type Database = {
           first_name: string | null
           id: string
           last_name: string | null
+          last_org_id: string | null
+          last_project_id: string | null
           linkedin_url: string | null
           location: string | null
           mobile_number: string | null
@@ -789,6 +866,14 @@ export type Database = {
       ingest_netsip_cdrs: {
         Args: { payload: string; trigger_type?: string; triggered_by?: string }
         Returns: Json
+      }
+      is_authorised: {
+        Args: { role_names: string[]; org_id: string; user_id?: string }
+        Returns: boolean
+      }
+      update_last_visited_context_by_slug: {
+        Args: { org_slug: string; project_slug?: string; uid?: string }
+        Returns: undefined
       }
     }
     Enums: {
