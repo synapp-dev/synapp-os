@@ -31,8 +31,14 @@ function isDescendantActive(
   projectSlug?: string
 ): boolean {
   const fullPath = `/${orgSlug}/${projectSlug}/${item.url}`;
+
+  // Check if current pathname exactly matches this item's path
   if (pathname === fullPath) return true;
 
+  // Check if current pathname starts with this item's path (for nested routes)
+  if (pathname.startsWith(fullPath + "/")) return true;
+
+  // Check if any direct children are active
   return (
     item.items?.some((child: NavItem) =>
       isDescendantActive(child, pathname, orgSlug, projectSlug)
@@ -101,9 +107,8 @@ function NavItemRecursive({
   const { currentProject } = useProject();
 
   // Check if this item or any descendant is active
-  const isActive =
-    pathname ===
-    `/${currentOrganisation?.slug}/${currentProject?.slug}/${item.url}`;
+  const fullPath = `/${currentOrganisation?.slug}/${currentProject?.slug}/${item.url}`;
+  const isActive = pathname === fullPath || pathname.startsWith(fullPath + "/");
   const hasActiveChild = item.items?.some((child: NavItem) =>
     isDescendantActive(child, pathname, orgSlug, projectSlug)
   );
@@ -117,7 +122,7 @@ function NavItemRecursive({
           <SidebarMenuButton
             asChild
             tooltip={item.title}
-            isActive={isActive}
+            isActive={isActive || hasActiveChild}
             className={[
               hasActiveChild
                 ? "border-l-2 border-muted-foreground font-bold transition-all"
