@@ -12,6 +12,8 @@ import type { Route } from "@/types/database";
 import React from "react";
 import { cn } from "@/lib/utils";
 import { RouteSettingsSheet } from "@/components/organisms/route-settings-sheet";
+import { useSearchParams } from "next/navigation";
+import { useRouteStore } from "@/stores/route";
 
 export function AdminRouteCard({
   route,
@@ -26,6 +28,39 @@ export function AdminRouteCard({
 }) {
   const status = getRouteStatus(route.id);
   const [isHovered, setIsHovered] = React.useState(false);
+
+  const searchParams = useSearchParams();
+  const activeProjectTypeId = searchParams.get("project-type") ?? null;
+  const activeRole = searchParams.get("role") ?? null;
+
+  const {
+    addRouteToProjectType,
+    removeRouteFromProjectType,
+    addRouteToRole,
+    removeRouteFromRole,
+  } = useRouteStore();
+
+  const handleProjectButtonClick = async () => {
+    if (!activeProjectTypeId) return;
+
+    if (status === "inactive") {
+      await addRouteToProjectType(activeProjectTypeId, route.id);
+    } else {
+      await removeRouteFromProjectType(activeProjectTypeId, route.id);
+    }
+  };
+
+  const handleRoleButtonClick = async () => {
+    if (!activeProjectTypeId || !activeRole) return;
+
+    const isRouteActiveForRole = status === "active";
+
+    if (isRouteActiveForRole) {
+      await removeRouteFromRole(activeRole, activeProjectTypeId, route.id);
+    } else {
+      await addRouteToRole(activeRole, activeProjectTypeId, route.id);
+    }
+  };
 
   return (
     <Card
@@ -87,42 +122,61 @@ export function AdminRouteCard({
         </div>
       </CardHeader>
       <CardContent>
-        <div className="flex gap-2">
-          <Button
-            variant={status === "inactive" ? "outline" : "secondary"}
-            size="sm"
-            className={cn(
-              "flex items-center gap-2 text-xs transition-all",
-              status === "inactive" &&
-                !isHovered &&
-                "invisible pointer-events-none opacity-0",
-              status === "inactive" &&
-                isHovered &&
-                "visible pointer-events-auto opacity-100"
+        {activeProjectTypeId && (
+          <div className="flex gap-2">
+            <Button
+              variant={status === "inactive" ? "outline" : "secondary"}
+              size="sm"
+              className={cn(
+                "flex items-center gap-2 text-xs transition-all",
+                status === "inactive" &&
+                  !isHovered &&
+                  "invisible pointer-events-none opacity-0",
+                status === "inactive" &&
+                  isHovered &&
+                  "visible pointer-eevents-auto opacity-100"
+              )}
+              tabIndex={status === "inactive" && !isHovered ? -1 : 0}
+              onClick={handleProjectButtonClick}
+            >
+              <LucideIcons.FolderOpenDot className="w-3 h-3" />
+              Project
+            </Button>
+            {activeRole && (
+              <>
+                {status === "active" && (
+                  <Button
+                    variant="secondary"
+                    size="sm"
+                    className={cn(
+                      "flex items-center gap-2 text-xs transition-all"
+                    )}
+                    onClick={handleRoleButtonClick}
+                  >
+                    <LucideIcons.Users className="w-3 h-3" />
+                    Role
+                  </Button>
+                )}
+                {status === "semi-active" && (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className={cn(
+                      "flex items-center gap-2 text-xs transition-all",
+                      !isHovered && "invisible pointer-events-none opacity-0",
+                      isHovered && "visible pointer-events-auto opacity-100"
+                    )}
+                    tabIndex={!isHovered ? -1 : 0}
+                    onClick={handleRoleButtonClick}
+                  >
+                    <LucideIcons.Users className="w-3 h-3" />
+                    Role
+                  </Button>
+                )}
+              </>
             )}
-            tabIndex={status === "inactive" && !isHovered ? -1 : 0}
-          >
-            <LucideIcons.Users className="w-3 h-3" />
-            Users
-          </Button>
-          <Button
-            variant={status === "inactive" ? "outline" : "secondary"}
-            size="sm"
-            className={cn(
-              "flex items-center gap-2 text-xs transition-all",
-              status === "inactive" &&
-                !isHovered &&
-                "invisible pointer-events-none opacity-0",
-              status === "inactive" &&
-                isHovered &&
-                "visible pointer-events-auto opacity-100"
-            )}
-            tabIndex={status === "inactive" && !isHovered ? -1 : 0}
-          >
-            <LucideIcons.FolderOpenDot className="w-3 h-3" />
-            Open Folder
-          </Button>
-        </div>
+          </div>
+        )}
       </CardContent>
       <CardFooter className={cn(status === "inactive" && "opacity-25")}>
         <div className="flex flex-col gap-2">

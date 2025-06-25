@@ -19,16 +19,12 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { createBrowserClient } from "@/utils/supabase/client";
 import { useState, useEffect } from "react";
-import type { ProjectType } from "@/types/database";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
+import { useProjectTypes } from "@/stores/project-types";
 
 export function ProjectTypeRouteCombobox() {
   const [open, setOpen] = useState(false);
-  const [projectTypes, setProjectTypes] = useState<ProjectType[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
 
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -37,34 +33,16 @@ export function ProjectTypeRouteCombobox() {
   // Get the current value from URL params
   const currentValue = searchParams.get("project-type") || "";
 
-  const supabase = createBrowserClient();
+  // Use the project types store
+  const { projectTypes, isLoading, error, fetchProjectTypes, isDataStale } =
+    useProjectTypes();
 
   useEffect(() => {
-    async function fetchProjectTypes() {
-      try {
-        setLoading(true);
-        const { data, error: fetchError } = await supabase.rpc(
-          "get_all_project_types"
-        );
-
-        if (fetchError) {
-          setError(fetchError.message);
-        } else {
-          console.log("Project types:", data);
-
-          setProjectTypes(data || []);
-        }
-      } catch (err) {
-        setError(
-          err instanceof Error ? err.message : "Failed to fetch project types"
-        );
-      } finally {
-        setLoading(false);
-      }
+    // Fetch project types if data is stale or empty
+    if (isDataStale() || projectTypes.length === 0) {
+      fetchProjectTypes();
     }
-
-    fetchProjectTypes();
-  }, [supabase]);
+  }, [fetchProjectTypes, isDataStale, projectTypes.length]);
 
   const updateUrl = (newValue: string) => {
     const params = new URLSearchParams(searchParams);
@@ -120,7 +98,7 @@ export function ProjectTypeRouteCombobox() {
           <CommandInput placeholder="Search project type..." className="h-9" />
           <CommandList>
             <CommandEmpty>
-              {loading
+              {isLoading
                 ? "Loading..."
                 : error
                 ? "Error loading project types"
