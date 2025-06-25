@@ -41,6 +41,8 @@ export async function updateSession(request: NextRequest) {
 
   const pathname = request.nextUrl.pathname
 
+  console.log('pathname', pathname)
+
 // 1. Handle root redirect logic
 if (user && pathname === '/') {
 
