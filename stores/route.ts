@@ -90,9 +90,10 @@ export const useRouteStore = create<RouteState>((set, get) => ({
   addRouteToProjectType: async (projectTypeId: string, routeId: string) => {
     try {
       const supabase = createBrowserClient();
-      const { error } = await supabase
-        .from('project_type_routes')
-        .insert([{ project_type_id: projectTypeId, route_id: routeId }]);
+      const { error } = await supabase.rpc('add_route_to_project_type', {
+        arg_project_type_id: projectTypeId,
+        arg_route_id: routeId,
+      });
 
       if (error) {
         set({ error: error.message });
@@ -108,11 +109,10 @@ export const useRouteStore = create<RouteState>((set, get) => ({
   removeRouteFromProjectType: async (projectTypeId: string, routeId: string) => {
     try {
       const supabase = createBrowserClient();
-      const { error } = await supabase
-        .from('project_type_routes')
-        .delete()
-        .eq('project_type_id', projectTypeId)
-        .eq('route_id', routeId);
+      const { error } = await supabase.rpc('remove_route_from_project_type', {
+        arg_project_type_id: projectTypeId,
+        arg_route_id: routeId,
+      });
 
       if (error) {
         set({ error: error.message });
@@ -128,32 +128,11 @@ export const useRouteStore = create<RouteState>((set, get) => ({
   addRouteToRole: async (roleId: string, projectTypeId: string, routeId: string) => {
     try {
       const supabase = createBrowserClient();
-      
-      // First, get the project_type_route_id
-      const { data: projectTypeRoute, error: fetchError } = await supabase
-        .from('project_type_routes')
-        .select('id')
-        .eq('project_type_id', projectTypeId)
-        .eq('route_id', routeId)
-        .single();
-
-      if (fetchError) {
-        set({ error: fetchError.message });
-        return;
-      }
-
-      if (!projectTypeRoute) {
-        set({ error: 'Project type route not found' });
-        return;
-      }
-
-      // Then insert into role permissions
-      const { error } = await supabase
-        .from('project_type_route_role_permissions')
-        .insert([{ 
-          project_type_route_id: projectTypeRoute.id,
-          role_id: roleId 
-        }]);
+      const { error } = await supabase.rpc('add_route_to_role', {
+        arg_role_id: roleId,
+        arg_project_type_id: projectTypeId,
+        arg_route_id: routeId,
+      });
 
       if (error) {
         set({ error: error.message });
@@ -169,31 +148,11 @@ export const useRouteStore = create<RouteState>((set, get) => ({
   removeRouteFromRole: async (roleId: string, projectTypeId: string, routeId: string) => {
     try {
       const supabase = createBrowserClient();
-      
-      // First, get the project_type_route_id
-      const { data: projectTypeRoute, error: fetchError } = await supabase
-        .from('project_type_routes')
-        .select('id')
-        .eq('project_type_id', projectTypeId)
-        .eq('route_id', routeId)
-        .single();
-
-      if (fetchError) {
-        set({ error: fetchError.message });
-        return;
-      }
-
-      if (!projectTypeRoute) {
-        set({ error: 'Project type route not found' });
-        return;
-      }
-
-      // Then delete from role permissions
-      const { error } = await supabase
-        .from('project_type_route_role_permissions')
-        .delete()
-        .eq('project_type_route_id', projectTypeRoute.id)
-        .eq('role_id', roleId);
+      const { error } = await supabase.rpc('remove_route_from_role', {
+        arg_role_id: roleId,
+        arg_project_type_id: projectTypeId,
+        arg_route_id: routeId,
+      });
 
       if (error) {
         set({ error: error.message });
