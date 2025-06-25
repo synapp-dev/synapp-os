@@ -690,6 +690,18 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      add_route_to_project_type: {
+        Args: { arg_project_type_id: string; arg_route_id: string }
+        Returns: undefined
+      }
+      add_route_to_role: {
+        Args: {
+          arg_role_id: string
+          arg_project_type_id: string
+          arg_route_id: string
+        }
+        Returns: undefined
+      }
       check_project_name: {
         Args: { p_name: string; p_org_id: string }
         Returns: boolean
@@ -870,6 +882,18 @@ export type Database = {
       is_authorised: {
         Args: { role_names: string[]; org_id: string; user_id?: string }
         Returns: boolean
+      }
+      remove_route_from_project_type: {
+        Args: { arg_project_type_id: string; arg_route_id: string }
+        Returns: undefined
+      }
+      remove_route_from_role: {
+        Args: {
+          arg_role_id: string
+          arg_project_type_id: string
+          arg_route_id: string
+        }
+        Returns: undefined
       }
       update_last_visited_context_by_slug: {
         Args: { org_slug: string; project_slug?: string; uid?: string }
