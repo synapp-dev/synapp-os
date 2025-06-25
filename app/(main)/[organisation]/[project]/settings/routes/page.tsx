@@ -1,6 +1,5 @@
 "use client";
 
-import { createBrowserClient } from "@/utils/supabase/client";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import * as LucideIcons from "lucide-react";
@@ -14,6 +13,7 @@ import { ProjectTypeRouteCombobox } from "@/components/molecules/project-type-ro
 import { ProjectTypeRouteRolePermissionsCombobox } from "@/components/molecules/project-type-route-role-permissions-combobox";
 import { AdminRouteCard } from "@/components/molecules/admin-route-card";
 import { StaggeredAnimation } from "@/components/atoms/staggered-animation";
+import { useRouteStore } from "@/stores/route";
 
 function RoutesGrid({
   routes,
@@ -218,99 +218,46 @@ function RoutesGrid({
 }
 
 export default function RoutesPage() {
-  const [routes, setRoutes] = useState<Route[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [projectTypeRouteIds, setProjectTypeRouteIds] = useState<string[]>([]);
-  const [rolePermissionRouteIds, setRolePermissionRouteIds] = useState<
-    string[]
-  >([]);
   const searchParams = useSearchParams();
-
-  // Get project type ID and role ID from URL params
   const projectTypeId = searchParams.get("project-type");
   const roleId = searchParams.get("role");
 
+  // Use the Zustand store
+  const {
+    routes,
+    projectTypeRouteIds,
+    rolePermissionRouteIds,
+    loading,
+    error,
+    fetchRoutes,
+    fetchRoutesByProjectType,
+    fetchRolePermissions,
+    clearProjectTypeRoutes,
+    clearRolePermissions,
+  } = useRouteStore();
+
+  // Fetch routes on component mount and when project type changes
   useEffect(() => {
-    async function fetchRoutes() {
-      try {
-        const supabase = createBrowserClient();
+    fetchRoutes("synapp", "administration");
+  }, [fetchRoutes]);
 
-        // If project type ID is provided, use the new function
-        if (projectTypeId) {
-          const { data, error } = await supabase.rpc(
-            "get_routes_by_project_type_id",
-            {
-              arg_project_type_id: projectTypeId,
-            }
-          );
-
-          console.log("Routes by project type ID:", {
-            data,
-            error,
-            projectTypeId,
-          });
-
-          if (error) {
-            setError(error.message);
-          } else {
-            // Store the route IDs for opacity filtering
-            const routeIds = data?.map((item) => item.route_id) || [];
-            setProjectTypeRouteIds(routeIds);
-            console.log("Route IDs found:", routeIds);
-          }
-        } else {
-          // Clear project type route IDs when no project type is selected
-          setProjectTypeRouteIds([]);
-        }
-
-        // Always fetch all routes for display
-        const { data, error } = await supabase.rpc("get_all_routes__admin", {
-          org_slug: "synapp",
-          project_slug: "administration",
-        });
-
-        if (error) {
-          setError(error.message);
-        } else {
-          setRoutes(data || []);
-        }
-      } catch {
-        setError("Failed to fetch routes");
-      } finally {
-        setLoading(false);
-      }
+  // Fetch project type routes when project type changes
+  useEffect(() => {
+    if (projectTypeId) {
+      fetchRoutesByProjectType(projectTypeId);
+    } else {
+      clearProjectTypeRoutes();
     }
+  }, [projectTypeId, fetchRoutesByProjectType, clearProjectTypeRoutes]);
 
-    fetchRoutes();
-  }, [projectTypeId]); // Re-run when project type ID changes
-
-  // Effect to call get_project_type_route_role_permissions_by_role_id if both params are present
+  // Fetch role permissions when both project type and role are present
   useEffect(() => {
     if (projectTypeId && roleId) {
-      const supabase = createBrowserClient();
-      supabase
-        .rpc("get_project_type_route_role_permissions_by_role_id", {
-          arg_role_id: roleId,
-          arg_project_type_id: projectTypeId,
-        })
-        .then(({ data, error }) => {
-          console.log("project_type_route_role_permissions_by_role_id", {
-            data,
-            error,
-            projectTypeId,
-            roleId,
-          });
-          if (Array.isArray(data)) {
-            setRolePermissionRouteIds(data.map((item) => item.route_id));
-          } else {
-            setRolePermissionRouteIds([]);
-          }
-        });
+      fetchRolePermissions(roleId, projectTypeId);
     } else {
-      setRolePermissionRouteIds([]);
+      clearRolePermissions();
     }
-  }, [projectTypeId, roleId]);
+  }, [projectTypeId, roleId, fetchRolePermissions, clearRolePermissions]);
 
   return (
     <div className="flex flex-col gap-6">
