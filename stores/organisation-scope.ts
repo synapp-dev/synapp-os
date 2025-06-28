@@ -15,6 +15,12 @@ type OrganisationSubscription = {
   role_name: string;
 };
 
+interface CreateOrganisationData {
+  name: string;
+  description?: string | null;
+  slug?: string | null;
+}
+
 interface OrganisationState {
   subscriptions: OrganisationSubscription[];
   activeOrganisationId: string | null;
@@ -27,6 +33,7 @@ interface OrganisationState {
   hasRole: (organisationId: string, roleName: string) => boolean;
   getActiveOrganisation: () => OrganisationSubscription | undefined;
   setActiveOrganisation: (id: string) => void;
+  createOrganisation: (data: CreateOrganisationData) => Promise<OrganisationSubscription | null>;
 }
 
 export const useOrganisationStore = create<OrganisationState>((set, get) => ({
@@ -95,6 +102,41 @@ export const useOrganisationStore = create<OrganisationState>((set, get) => ({
         name: org.organisation_name,
         slug: org.organisation_slug
       });
+    }
+  },
+  createOrganisation: async (data: CreateOrganisationData) => {
+    try {
+      const supabase = createBrowserClient();
+      
+      // Insert the new organisation
+      const { data: newOrg, error: insertError } = await supabase
+        .from('organisations')
+        .insert({
+          name: data.name,
+          description: data.description,
+          slug: data.slug,
+        })
+        .select()
+        .single();
+      
+      if (insertError) throw insertError;
+      
+      // Refresh the subscriptions to include the new organisation
+      await get().fetchSubscriptions();
+      
+      // Find the newly created organisation in the subscriptions
+      const newSubscription = get().getOrganisationById(newOrg.id);
+      
+      if (newSubscription) {
+        // Set it as the active organisation
+        get().setActiveOrganisation(newOrg.id);
+        return newSubscription;
+      }
+      
+      return null;
+    } catch (error) {
+      console.error('Failed to create organisation:', error);
+      throw error;
     }
   }
 }));
