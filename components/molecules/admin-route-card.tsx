@@ -14,6 +14,8 @@ import { cn } from "@/lib/utils";
 import { RouteSettingsSheet } from "@/components/organisms/route-settings-sheet";
 import { useSearchParams } from "next/navigation";
 import { useRouteStore } from "@/stores/route";
+import { useProjectTypes } from "@/stores/project-types";
+import { useRoles } from "@/stores/roles";
 
 export function AdminRouteCard({
   route,
@@ -40,6 +42,28 @@ export function AdminRouteCard({
     removeRouteFromRole,
   } = useRouteStore();
 
+  const { getProjectTypeById } = useProjectTypes();
+  const { getRoleById } = useRoles();
+  
+  // Get the project type name if we have an active project type ID
+  const projectType = activeProjectTypeId ? getProjectTypeById(activeProjectTypeId) : null;
+  const projectTypeName = projectType?.name || "Project";
+
+  // Get the role name if we have an active role ID
+  const role = activeRole ? getRoleById(activeRole) : null;
+  const roleName = role?.name || "Role";
+
+  // Helper function to get Lucide icon component by name
+  const getProjectTypeIcon = (iconName: string | null) => {
+    if (!iconName) return <LucideIcons.FolderOpenDot className="w-3 h-3" />;
+    
+    const IconComponent = LucideIcons[
+      iconName as keyof typeof LucideIcons
+    ] as React.ComponentType<{ className?: string }>;
+    
+    return IconComponent ? <IconComponent className="w-3 h-3" /> : <LucideIcons.FolderOpenDot className="w-3 h-3" />;
+  };
+
   const handleProjectButtonClick = async () => {
     if (!activeProjectTypeId) return;
 
@@ -59,6 +83,32 @@ export function AdminRouteCard({
       await removeRouteFromRole(activeRole, activeProjectTypeId, route.id);
     } else {
       await addRouteToRole(activeRole, activeProjectTypeId, route.id);
+    }
+  };
+
+  const handleChildRouteClick = async (childRouteId: string) => {
+    if (!activeProjectTypeId) return;
+
+    // Check if the child route is currently active for the project type
+    const childRouteStatus = getRouteStatus(childRouteId);
+    const isChildRouteActive = childRouteStatus === "active" || childRouteStatus === "semi-active";
+
+    if (activeRole) {
+      // If role is selected, handle role permissions (like main cards)
+      const isRouteActiveForRole = childRouteStatus === "active";
+      
+      if (isRouteActiveForRole) {
+        await removeRouteFromRole(activeRole, activeProjectTypeId, childRouteId);
+      } else {
+        await addRouteToRole(activeRole, activeProjectTypeId, childRouteId);
+      }
+    } else {
+      // If no role selected, handle project type (add/remove from project type)
+      if (isChildRouteActive) {
+        await removeRouteFromProjectType(activeProjectTypeId, childRouteId);
+      } else {
+        await addRouteToProjectType(activeProjectTypeId, childRouteId);
+      }
     }
   };
 
@@ -139,8 +189,8 @@ export function AdminRouteCard({
               tabIndex={status === "inactive" && !isHovered ? -1 : 0}
               onClick={handleProjectButtonClick}
             >
-              <LucideIcons.FolderOpenDot className="w-3 h-3" />
-              Project
+              {getProjectTypeIcon(projectType?.lucide_icon ?? null)}
+              {projectTypeName}
             </Button>
             {activeRole && (
               <>
@@ -154,7 +204,7 @@ export function AdminRouteCard({
                     onClick={handleRoleButtonClick}
                   >
                     <LucideIcons.Users className="w-3 h-3" />
-                    Role
+                    {roleName}
                   </Button>
                 )}
                 {status === "semi-active" && (
@@ -170,7 +220,7 @@ export function AdminRouteCard({
                     onClick={handleRoleButtonClick}
                   >
                     <LucideIcons.Users className="w-3 h-3" />
-                    Role
+                    {roleName}
                   </Button>
                 )}
               </>
@@ -186,30 +236,40 @@ export function AdminRouteCard({
           </div>
 
           <div className="flex flex-wrap gap-1">
-            <Badge
-              variant="secondary"
-              className={`text-xs flex items-center gap-1 bg-transparent border border-primary/20`}
-            >
-              <LucideIcons.Plus className="w-3 h-3" />
-              Add
-            </Badge>
             {childRoutes?.length > 0 &&
-              childRoutes?.map((childRoute) => (
-                <Badge
-                  key={childRoute.id}
-                  variant="secondary"
-                  className={cn(
-                    "text-xs flex items-center gap-1",
-                    status === "active" && "bg-muted/50",
-                    status === "semi-active" && "bg-muted/5 border-primary/25",
-                    status === "inactive" &&
-                      "bg-transparent border border-muted/20"
-                  )}
-                >
-                  {getIconComponent(childRoute.lucide_icon)}
-                  {childRoute.nav_label}
-                </Badge>
-              ))}
+              childRoutes?.map((childRoute) => {
+                const childRouteStatus = getRouteStatus(childRoute.id);
+                
+                // Determine the visual state based on context
+                let visualState;
+                if (activeRole) {
+                  // When role is selected, use the status directly
+                  visualState = childRouteStatus;
+                } else {
+                  // When only project type is selected, treat project type routes as "active"
+                  visualState = childRouteStatus === "inactive" ? "inactive" : "active";
+                }
+                
+                return (
+                  <Badge
+                    key={childRoute.id}
+                    variant="secondary"
+                    className={cn(
+                      "text-xs flex items-center gap-1 cursor-pointer transition-all hover:opacity-80",
+                      // Active: in project type (when no role) OR in both project type and role
+                      visualState === "active" && "bg-muted",
+                      // Semi-active: in project type but not role (only when role is selected)
+                      visualState === "semi-active" && "bg-transparent border border-primary/50",
+                      // Inactive: in neither
+                      visualState === "inactive" && "bg-transparent text-muted-foreground/50"
+                    )}
+                    onClick={() => handleChildRouteClick(childRoute.id)}
+                  >
+                    {getIconComponent(childRoute.lucide_icon)}
+                    {childRoute.nav_label}
+                  </Badge>
+                );
+              })}
           </div>
         </div>
       </CardFooter>

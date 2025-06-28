@@ -18,22 +18,16 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { createBrowserClient } from "@/utils/supabase/client";
-import type { Database } from "@/types/supabase";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-
-type Role = Database["public"]["Functions"]["get_all_roles"]["Returns"][0];
+import { useRoles } from "@/stores/roles";
 
 export function ProjectTypeRouteRolePermissionsCombobox() {
   const [open, setOpen] = React.useState(false);
-  const [roles, setRoles] = React.useState<Role[]>([]);
-  const [loading, setLoading] = React.useState(true);
-  const [error, setError] = React.useState<string | null>(null);
 
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -43,28 +37,15 @@ export function ProjectTypeRouteRolePermissionsCombobox() {
   const currentValue = searchParams.get("role") || "";
   const projectTypeId = searchParams.get("project-type");
 
-  const supabase = createBrowserClient();
+  // Use the roles store
+  const { roles, isLoading, error, fetchRoles, isDataStale } = useRoles();
 
   React.useEffect(() => {
-    async function fetchRoles() {
-      try {
-        setLoading(true);
-        const { data, error: fetchError } = await supabase.rpc("get_all_roles");
-
-        if (fetchError) {
-          setError(fetchError.message);
-        } else {
-          setRoles(data || []);
-        }
-      } catch (err) {
-        setError(err instanceof Error ? err.message : "Failed to fetch roles");
-      } finally {
-        setLoading(false);
-      }
+    // Fetch roles if data is stale or empty
+    if (isDataStale() || roles.length === 0) {
+      fetchRoles();
     }
-
-    fetchRoles();
-  }, [supabase]);
+  }, [fetchRoles, isDataStale, roles.length]);
 
   const updateUrl = (newValue: string) => {
     const params = new URLSearchParams(searchParams);
@@ -102,7 +83,7 @@ export function ProjectTypeRouteRolePermissionsCombobox() {
                 <CommandInput placeholder="Search role..." className="h-9" />
                 <CommandList>
                   <CommandEmpty>
-                    {loading
+                    {isLoading
                       ? "Loading..."
                       : error
                       ? "Error loading roles"
