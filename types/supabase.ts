@@ -9,6 +9,106 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      action_permissions: {
+        Row: {
+          action_id: string
+          allow: boolean
+          created_at: string | null
+          expires_at: string | null
+          id: string
+          organisation_id: string | null
+          project_id: string | null
+          project_type_id: string | null
+          role_id: string | null
+          user_id: string | null
+        }
+        Insert: {
+          action_id: string
+          allow?: boolean
+          created_at?: string | null
+          expires_at?: string | null
+          id?: string
+          organisation_id?: string | null
+          project_id?: string | null
+          project_type_id?: string | null
+          role_id?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          action_id?: string
+          allow?: boolean
+          created_at?: string | null
+          expires_at?: string | null
+          id?: string
+          organisation_id?: string | null
+          project_id?: string | null
+          project_type_id?: string | null
+          role_id?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "action_permissions_action_id_fkey"
+            columns: ["action_id"]
+            isOneToOne: false
+            referencedRelation: "actions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "action_permissions_organisation_id_fkey"
+            columns: ["organisation_id"]
+            isOneToOne: false
+            referencedRelation: "organisations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "action_permissions_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "action_permissions_project_type_id_fkey"
+            columns: ["project_type_id"]
+            isOneToOne: false
+            referencedRelation: "project_types"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "action_permissions_role_id_fkey"
+            columns: ["role_id"]
+            isOneToOne: false
+            referencedRelation: "roles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "action_permissions_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "user_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      actions: {
+        Row: {
+          description: string | null
+          id: string
+          name: string
+        }
+        Insert: {
+          description?: string | null
+          id?: string
+          name: string
+        }
+        Update: {
+          description?: string | null
+          id?: string
+          name?: string
+        }
+        Relationships: []
+      }
       nav_groups: {
         Row: {
           id: string
@@ -701,6 +801,10 @@ export type Database = {
           arg_route_id: string
         }
         Returns: undefined
+      }
+      check_action_permission: {
+        Args: { action_name: string }
+        Returns: boolean
       }
       check_project_name: {
         Args: { p_name: string; p_org_id: string }
