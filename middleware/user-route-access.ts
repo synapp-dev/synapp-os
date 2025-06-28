@@ -19,6 +19,31 @@ export async function userRouteAccessMiddleware(request: NextRequest) {
     const parentRoute = pathParts.length >= 3 ? pathParts[2] : undefined;
     const subRoute = pathParts.length >= 4 ? pathParts[3] : undefined;
 
+    // Special case: organisation-level settings route
+    if (pathParts.length === 2 && pathParts[1] === 'settings') {
+      // Check if user has access to the organisation
+      const { data: canAccessOrg, error: orgError } = await supabase.rpc('get_user_organisation_access', {
+        org_id: orgSlug,
+        uid: undefined // Will use current user
+      });
+
+      if (orgError) {
+        console.error('Error checking organisation access:', orgError);
+        const url = request.nextUrl.clone();
+        url.pathname = '/not-found';
+        return NextResponse.redirect(url);
+      }
+
+      if (!canAccessOrg) {
+        const url = request.nextUrl.clone();
+        url.pathname = '/not-found';
+        return NextResponse.redirect(url);
+      }
+
+      return NextResponse.next();
+    }
+
+    // For all other routes, use the existing check
     const { data: canAccess, error } = await supabase.rpc('check_user_can_access_route', {
       org_slug: orgSlug,
       project_slug: projectSlug,
