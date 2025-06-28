@@ -1,3 +1,5 @@
+import { SettingsPageTemplate } from "@/components/templates/settings-page-template";
+
 export default function ClientsPage() {
-  return <div>Clients</div>;
+  return <SettingsPageTemplate title="Clients" />;
 }
