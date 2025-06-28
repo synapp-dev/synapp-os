@@ -67,4 +67,9 @@ begin
   where ptr.project_type_id = p_project_type_id
   order by ng.nav_order, ptr.nav_order;
 end;
-$$; 
+$$;
+
+-- Add action for organisation settings access
+insert into actions (name, description) values 
+  ('access_organisation_settings', 'Access organisation-level settings page')
+on conflict (name) do nothing; 
