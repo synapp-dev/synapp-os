@@ -19,6 +19,7 @@ import { Separator } from "@/components/ui/separator";
 import * as LucideIcons from "lucide-react";
 import type { Route } from "@/types/database";
 import { Card } from "@/components/ui/card";
+import { NewRouteSheet } from "@/components/organisms/new-route-sheet";
 
 interface RouteSettingsSheetProps {
   route: Route;
@@ -152,10 +153,15 @@ export function RouteSettingsSheet({
             <div className="space-y-4">
               <div className="flex items-center justify-between">
                 <h3 className="text-sm font-medium">Child Routes</h3>
-                <Button variant="outline" size="sm">
-                  <LucideIcons.Plus className="w-4 h-4 mr-2" />
-                  Add Child
-                </Button>
+                <NewRouteSheet
+                  parentId={route.id}
+                  trigger={
+                    <Button variant="outline" size="sm">
+                      <LucideIcons.Plus className="w-4 h-4 mr-2" />
+                      Add Child
+                    </Button>
+                  }
+                />
               </div>
 
               {childRoutes.length > 0 ? (

@@ -5,7 +5,6 @@ import { Input } from "@/components/ui/input";
 import * as LucideIcons from "lucide-react";
 import type { Route } from "@/types/database";
 import { useState, useEffect, useMemo } from "react";
-import { Button } from "@/components/ui/button";
 import { useSearchParams } from "next/navigation";
 
 import { Separator } from "@/components/ui/separator";
@@ -14,6 +13,7 @@ import { ProjectTypeRouteRolePermissionsCombobox } from "@/components/molecules/
 import { AdminRouteCard } from "@/components/molecules/admin-route-card";
 import { StaggeredAnimation } from "@/components/atoms/staggered-animation";
 import { useRouteStore } from "@/stores/route";
+import { NewRouteSheet } from "@/components/organisms/new-route-sheet";
 
 function RoutesGrid({
   routes,
@@ -143,10 +143,7 @@ function RoutesGrid({
       <div className="sticky top-16 z-10 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 pb-4 -mx-6 px-6">
         <div className="flex gap-4 items-center justify-between">
           <div className="flex gap-4 items-center w-full">
-            <Button size="sm">
-              <LucideIcons.Plus className="w-4 h-4" />
-              New Route
-            </Button>
+            <NewRouteSheet />
 
             <div className="relative w-full">
               <Input
